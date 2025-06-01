@@ -1,0 +1,36 @@
+.env
+
+# Go build outputs
+bin/
+_build/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.out
+
+# Dependency directories (uncomment if using vendoring)
+# vendor/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE files
+
+# GoLand IDE
+.idea/
+*.iml
+
+# VSCode (if you use it)
+.vscode/
+
+# Swap files for vim/emacs
+*.swp
+*.swo
