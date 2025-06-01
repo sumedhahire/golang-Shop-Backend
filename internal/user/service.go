@@ -7,6 +7,7 @@ import (
 
 type IUserService interface {
 	Get(ctx context.Context, id string) (RSUser, error)
+	List(ctx context.Context) ([]RSUser, error)
 }
 
 type SService struct {
@@ -25,5 +26,18 @@ func (s SService) Get(ctx context.Context, id string) (RSUser, error) {
 
 	var rs RSUser
 	rs.MapFrom(user)
+	return rs, nil
+}
+
+func (s SService) List(ctx context.Context) ([]RSUser, error) {
+	user, err := s.storage.List(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	rs := make([]RSUser, len(user))
+	for index, value := range user {
+		rs[index].MapFrom(&value)
+	}
 	return rs, nil
 }

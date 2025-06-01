@@ -5,6 +5,7 @@ import (
 	"inventory/internal/inventory"
 )
 
+// RQCart represents the payload for cart purchase
 type RQCart struct {
 	ProductId string `json:"productId" validate:"required"`
 	UserID    string `json:"-"`

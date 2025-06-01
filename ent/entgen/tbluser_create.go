@@ -65,15 +65,15 @@ func (tuc *TblUserCreate) SetPassword(s string) *TblUserCreate {
 }
 
 // SetIsActive sets the "is_active" field.
-func (tuc *TblUserCreate) SetIsActive(i int) *TblUserCreate {
-	tuc.mutation.SetIsActive(i)
+func (tuc *TblUserCreate) SetIsActive(b bool) *TblUserCreate {
+	tuc.mutation.SetIsActive(b)
 	return tuc
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (tuc *TblUserCreate) SetNillableIsActive(i *int) *TblUserCreate {
-	if i != nil {
-		tuc.SetIsActive(*i)
+func (tuc *TblUserCreate) SetNillableIsActive(b *bool) *TblUserCreate {
+	if b != nil {
+		tuc.SetIsActive(*b)
 	}
 	return tuc
 }
@@ -398,7 +398,7 @@ func (tuc *TblUserCreate) createSpec() (*TblUser, *sqlgraph.CreateSpec) {
 		_node.Password = value
 	}
 	if value, ok := tuc.mutation.IsActive(); ok {
-		_spec.SetField(tbluser.FieldIsActive, field.TypeInt, value)
+		_spec.SetField(tbluser.FieldIsActive, field.TypeBool, value)
 		_node.IsActive = value
 	}
 	if value, ok := tuc.mutation.ZipCode(); ok {
@@ -596,7 +596,7 @@ func (u *TblUserUpsert) UpdatePassword() *TblUserUpsert {
 }
 
 // SetIsActive sets the "is_active" field.
-func (u *TblUserUpsert) SetIsActive(v int) *TblUserUpsert {
+func (u *TblUserUpsert) SetIsActive(v bool) *TblUserUpsert {
 	u.Set(tbluser.FieldIsActive, v)
 	return u
 }
@@ -604,12 +604,6 @@ func (u *TblUserUpsert) SetIsActive(v int) *TblUserUpsert {
 // UpdateIsActive sets the "is_active" field to the value that was provided on create.
 func (u *TblUserUpsert) UpdateIsActive() *TblUserUpsert {
 	u.SetExcluded(tbluser.FieldIsActive)
-	return u
-}
-
-// AddIsActive adds v to the "is_active" field.
-func (u *TblUserUpsert) AddIsActive(v int) *TblUserUpsert {
-	u.Add(tbluser.FieldIsActive, v)
 	return u
 }
 
@@ -853,16 +847,9 @@ func (u *TblUserUpsertOne) UpdatePassword() *TblUserUpsertOne {
 }
 
 // SetIsActive sets the "is_active" field.
-func (u *TblUserUpsertOne) SetIsActive(v int) *TblUserUpsertOne {
+func (u *TblUserUpsertOne) SetIsActive(v bool) *TblUserUpsertOne {
 	return u.Update(func(s *TblUserUpsert) {
 		s.SetIsActive(v)
-	})
-}
-
-// AddIsActive adds v to the "is_active" field.
-func (u *TblUserUpsertOne) AddIsActive(v int) *TblUserUpsertOne {
-	return u.Update(func(s *TblUserUpsert) {
-		s.AddIsActive(v)
 	})
 }
 
@@ -1299,16 +1286,9 @@ func (u *TblUserUpsertBulk) UpdatePassword() *TblUserUpsertBulk {
 }
 
 // SetIsActive sets the "is_active" field.
-func (u *TblUserUpsertBulk) SetIsActive(v int) *TblUserUpsertBulk {
+func (u *TblUserUpsertBulk) SetIsActive(v bool) *TblUserUpsertBulk {
 	return u.Update(func(s *TblUserUpsert) {
 		s.SetIsActive(v)
-	})
-}
-
-// AddIsActive adds v to the "is_active" field.
-func (u *TblUserUpsertBulk) AddIsActive(v int) *TblUserUpsertBulk {
-	return u.Update(func(s *TblUserUpsert) {
-		s.AddIsActive(v)
 	})
 }
 

@@ -853,15 +853,15 @@ func (c *TblInventoryClient) GetX(ctx context.Context, id string) *TblInventory 
 	return obj
 }
 
-// QueryInventory queries the inventory edge of a TblInventory.
-func (c *TblInventoryClient) QueryInventory(ti *TblInventory) *TblInventoryTagQuery {
+// QueryInventoryTag queries the inventoryTag edge of a TblInventory.
+func (c *TblInventoryClient) QueryInventoryTag(ti *TblInventory) *TblInventoryTagQuery {
 	query := (&TblInventoryTagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ti.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tblinventory.Table, tblinventory.FieldID, id),
 			sqlgraph.To(tblinventorytag.Table, tblinventorytag.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, tblinventory.InventoryTable, tblinventory.InventoryColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, tblinventory.InventoryTagTable, tblinventory.InventoryTagColumn),
 		)
 		fromV = sqlgraph.Neighbors(ti.driver.Dialect(), step)
 		return fromV, nil
@@ -1034,15 +1034,15 @@ func (c *TblInventoryTagClient) GetX(ctx context.Context, id string) *TblInvento
 	return obj
 }
 
-// QueryTagID queries the tag_Id edge of a TblInventoryTag.
-func (c *TblInventoryTagClient) QueryTagID(tit *TblInventoryTag) *TblTagQuery {
-	query := (&TblTagClient{config: c.config}).Query()
+// QueryInventory queries the inventory edge of a TblInventoryTag.
+func (c *TblInventoryTagClient) QueryInventory(tit *TblInventoryTag) *TblInventoryQuery {
+	query := (&TblInventoryClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := tit.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tblinventorytag.Table, tblinventorytag.FieldID, id),
-			sqlgraph.To(tbltag.Table, tbltag.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, tblinventorytag.TagIDTable, tblinventorytag.TagIDColumn),
+			sqlgraph.To(tblinventory.Table, tblinventory.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, tblinventorytag.InventoryTable, tblinventorytag.InventoryColumn),
 		)
 		fromV = sqlgraph.Neighbors(tit.driver.Dialect(), step)
 		return fromV, nil
@@ -1050,15 +1050,15 @@ func (c *TblInventoryTagClient) QueryTagID(tit *TblInventoryTag) *TblTagQuery {
 	return query
 }
 
-// QueryInventoryID queries the inventory_Id edge of a TblInventoryTag.
-func (c *TblInventoryTagClient) QueryInventoryID(tit *TblInventoryTag) *TblInventoryQuery {
-	query := (&TblInventoryClient{config: c.config}).Query()
+// QueryTag queries the tag edge of a TblInventoryTag.
+func (c *TblInventoryTagClient) QueryTag(tit *TblInventoryTag) *TblTagQuery {
+	query := (&TblTagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := tit.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tblinventorytag.Table, tblinventorytag.FieldID, id),
-			sqlgraph.To(tblinventory.Table, tblinventory.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, tblinventorytag.InventoryIDTable, tblinventorytag.InventoryIDColumn),
+			sqlgraph.To(tbltag.Table, tbltag.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, tblinventorytag.TagTable, tblinventorytag.TagColumn),
 		)
 		fromV = sqlgraph.Neighbors(tit.driver.Dialect(), step)
 		return fromV, nil
@@ -1364,15 +1364,15 @@ func (c *TblTagClient) GetX(ctx context.Context, id string) *TblTag {
 	return obj
 }
 
-// QueryTag queries the tag edge of a TblTag.
-func (c *TblTagClient) QueryTag(tt *TblTag) *TblInventoryTagQuery {
+// QueryInventoryTag queries the inventoryTag edge of a TblTag.
+func (c *TblTagClient) QueryInventoryTag(tt *TblTag) *TblInventoryTagQuery {
 	query := (&TblInventoryTagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := tt.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tbltag.Table, tbltag.FieldID, id),
 			sqlgraph.To(tblinventorytag.Table, tblinventorytag.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, tbltag.TagTable, tbltag.TagColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, tbltag.InventoryTagTable, tbltag.InventoryTagColumn),
 		)
 		fromV = sqlgraph.Neighbors(tt.driver.Dialect(), step)
 		return fromV, nil

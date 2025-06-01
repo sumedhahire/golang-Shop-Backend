@@ -130,13 +130,11 @@ var (
 	// TblInventoryTagColumns holds the columns for the "Tbl_Inventory_Tag" table.
 	TblInventoryTagColumns = []*schema.Column{
 		{Name: "Id_uuid", Type: field.TypeString},
-		{Name: "InventoryId", Type: field.TypeString, Nullable: true},
-		{Name: "TagId", Type: field.TypeString, Nullable: true},
 		{Name: "Created_at", Type: field.TypeTime},
 		{Name: "Updated_at", Type: field.TypeTime},
-		{Name: "Deleted_at", Type: field.TypeTime},
-		{Name: "tbl_inventory_inventory", Type: field.TypeString, Nullable: true},
-		{Name: "tbl_tag_tag", Type: field.TypeString, Nullable: true},
+		{Name: "Deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "InventoryId", Type: field.TypeString, Nullable: true},
+		{Name: "TagId", Type: field.TypeString, Nullable: true},
 	}
 	// TblInventoryTagTable holds the schema information for the "Tbl_Inventory_Tag" table.
 	TblInventoryTagTable = &schema.Table{
@@ -145,14 +143,14 @@ var (
 		PrimaryKey: []*schema.Column{TblInventoryTagColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "Tbl_Inventory_Tag_Tbl_Inventory_inventory",
-				Columns:    []*schema.Column{TblInventoryTagColumns[6]},
+				Symbol:     "Tbl_Inventory_Tag_Tbl_Inventory_inventoryTag",
+				Columns:    []*schema.Column{TblInventoryTagColumns[4]},
 				RefColumns: []*schema.Column{TblInventoryColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "Tbl_Inventory_Tag_Tbl_Tag_tag",
-				Columns:    []*schema.Column{TblInventoryTagColumns[7]},
+				Symbol:     "Tbl_Inventory_Tag_Tbl_Tag_inventoryTag",
+				Columns:    []*schema.Column{TblInventoryTagColumns[5]},
 				RefColumns: []*schema.Column{TblTagColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -214,7 +212,7 @@ var (
 		{Name: "email", Type: field.TypeString, Unique: true, Size: 255},
 		{Name: "birth_date", Type: field.TypeTime, Nullable: true},
 		{Name: "password", Type: field.TypeString, Size: 255},
-		{Name: "is_active", Type: field.TypeInt, Default: 1},
+		{Name: "is_active", Type: field.TypeBool, Default: true},
 		{Name: "zip_code", Type: field.TypeInt, Nullable: true},
 		{Name: "address", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "ip_address", Type: field.TypeString, Nullable: true, Size: 40},

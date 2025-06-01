@@ -91,7 +91,7 @@ func Password(v string) predicate.TblUser {
 }
 
 // IsActive applies equality check predicate on the "is_active" field. It's identical to IsActiveEQ.
-func IsActive(v int) predicate.TblUser {
+func IsActive(v bool) predicate.TblUser {
 	return predicate.TblUser(sql.FieldEQ(FieldIsActive, v))
 }
 
@@ -436,43 +436,13 @@ func PasswordContainsFold(v string) predicate.TblUser {
 }
 
 // IsActiveEQ applies the EQ predicate on the "is_active" field.
-func IsActiveEQ(v int) predicate.TblUser {
+func IsActiveEQ(v bool) predicate.TblUser {
 	return predicate.TblUser(sql.FieldEQ(FieldIsActive, v))
 }
 
 // IsActiveNEQ applies the NEQ predicate on the "is_active" field.
-func IsActiveNEQ(v int) predicate.TblUser {
+func IsActiveNEQ(v bool) predicate.TblUser {
 	return predicate.TblUser(sql.FieldNEQ(FieldIsActive, v))
-}
-
-// IsActiveIn applies the In predicate on the "is_active" field.
-func IsActiveIn(vs ...int) predicate.TblUser {
-	return predicate.TblUser(sql.FieldIn(FieldIsActive, vs...))
-}
-
-// IsActiveNotIn applies the NotIn predicate on the "is_active" field.
-func IsActiveNotIn(vs ...int) predicate.TblUser {
-	return predicate.TblUser(sql.FieldNotIn(FieldIsActive, vs...))
-}
-
-// IsActiveGT applies the GT predicate on the "is_active" field.
-func IsActiveGT(v int) predicate.TblUser {
-	return predicate.TblUser(sql.FieldGT(FieldIsActive, v))
-}
-
-// IsActiveGTE applies the GTE predicate on the "is_active" field.
-func IsActiveGTE(v int) predicate.TblUser {
-	return predicate.TblUser(sql.FieldGTE(FieldIsActive, v))
-}
-
-// IsActiveLT applies the LT predicate on the "is_active" field.
-func IsActiveLT(v int) predicate.TblUser {
-	return predicate.TblUser(sql.FieldLT(FieldIsActive, v))
-}
-
-// IsActiveLTE applies the LTE predicate on the "is_active" field.
-func IsActiveLTE(v int) predicate.TblUser {
-	return predicate.TblUser(sql.FieldLTE(FieldIsActive, v))
 }
 
 // ZipCodeEQ applies the EQ predicate on the "zip_code" field.

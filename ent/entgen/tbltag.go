@@ -37,20 +37,20 @@ type TblTag struct {
 
 // TblTagEdges holds the relations/edges for other nodes in the graph.
 type TblTagEdges struct {
-	// Tag holds the value of the tag edge.
-	Tag []*TblInventoryTag `json:"tag,omitempty"`
+	// InventoryTag holds the value of the inventoryTag edge.
+	InventoryTag []*TblInventoryTag `json:"inventoryTag,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// TagOrErr returns the Tag value or an error if the edge
+// InventoryTagOrErr returns the InventoryTag value or an error if the edge
 // was not loaded in eager-loading.
-func (e TblTagEdges) TagOrErr() ([]*TblInventoryTag, error) {
+func (e TblTagEdges) InventoryTagOrErr() ([]*TblInventoryTag, error) {
 	if e.loadedTypes[0] {
-		return e.Tag, nil
+		return e.InventoryTag, nil
 	}
-	return nil, &NotLoadedError{edge: "tag"}
+	return nil, &NotLoadedError{edge: "inventoryTag"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -135,9 +135,9 @@ func (tt *TblTag) Value(name string) (ent.Value, error) {
 	return tt.selectValues.Get(name)
 }
 
-// QueryTag queries the "tag" edge of the TblTag entity.
-func (tt *TblTag) QueryTag() *TblInventoryTagQuery {
-	return NewTblTagClient(tt.config).QueryTag(tt)
+// QueryInventoryTag queries the "inventoryTag" edge of the TblTag entity.
+func (tt *TblTag) QueryInventoryTag() *TblInventoryTagQuery {
+	return NewTblTagClient(tt.config).QueryInventoryTag(tt)
 }
 
 // Update returns a builder for updating this TblTag.

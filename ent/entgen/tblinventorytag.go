@@ -31,43 +31,41 @@ type TblInventoryTag struct {
 	DeletedAt *time.Time `json:"Deleted_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TblInventoryTagQuery when eager-loading is set.
-	Edges                   TblInventoryTagEdges `json:"edges"`
-	tbl_inventory_inventory *string
-	tbl_tag_tag             *string
-	selectValues            sql.SelectValues
+	Edges        TblInventoryTagEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // TblInventoryTagEdges holds the relations/edges for other nodes in the graph.
 type TblInventoryTagEdges struct {
-	// TagID holds the value of the tag_Id edge.
-	TagID *TblTag `json:"tag_Id,omitempty"`
-	// InventoryID holds the value of the inventory_Id edge.
-	InventoryID *TblInventory `json:"inventory_Id,omitempty"`
+	// Inventory holds the value of the inventory edge.
+	Inventory *TblInventory `json:"inventory,omitempty"`
+	// Tag holds the value of the tag edge.
+	Tag *TblTag `json:"tag,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [2]bool
 }
 
-// TagIDOrErr returns the TagID value or an error if the edge
+// InventoryOrErr returns the Inventory value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TblInventoryTagEdges) TagIDOrErr() (*TblTag, error) {
-	if e.TagID != nil {
-		return e.TagID, nil
+func (e TblInventoryTagEdges) InventoryOrErr() (*TblInventory, error) {
+	if e.Inventory != nil {
+		return e.Inventory, nil
 	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: tbltag.Label}
-	}
-	return nil, &NotLoadedError{edge: "tag_Id"}
-}
-
-// InventoryIDOrErr returns the InventoryID value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e TblInventoryTagEdges) InventoryIDOrErr() (*TblInventory, error) {
-	if e.InventoryID != nil {
-		return e.InventoryID, nil
-	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: tblinventory.Label}
 	}
-	return nil, &NotLoadedError{edge: "inventory_Id"}
+	return nil, &NotLoadedError{edge: "inventory"}
+}
+
+// TagOrErr returns the Tag value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TblInventoryTagEdges) TagOrErr() (*TblTag, error) {
+	if e.Tag != nil {
+		return e.Tag, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: tbltag.Label}
+	}
+	return nil, &NotLoadedError{edge: "tag"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -79,10 +77,6 @@ func (*TblInventoryTag) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case tblinventorytag.FieldCreatedAt, tblinventorytag.FieldUpdatedAt, tblinventorytag.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case tblinventorytag.ForeignKeys[0]: // tbl_inventory_inventory
-			values[i] = new(sql.NullString)
-		case tblinventorytag.ForeignKeys[1]: // tbl_tag_tag
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -135,20 +129,6 @@ func (tit *TblInventoryTag) assignValues(columns []string, values []any) error {
 				tit.DeletedAt = new(time.Time)
 				*tit.DeletedAt = value.Time
 			}
-		case tblinventorytag.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field tbl_inventory_inventory", values[i])
-			} else if value.Valid {
-				tit.tbl_inventory_inventory = new(string)
-				*tit.tbl_inventory_inventory = value.String
-			}
-		case tblinventorytag.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field tbl_tag_tag", values[i])
-			} else if value.Valid {
-				tit.tbl_tag_tag = new(string)
-				*tit.tbl_tag_tag = value.String
-			}
 		default:
 			tit.selectValues.Set(columns[i], values[i])
 		}
@@ -162,14 +142,14 @@ func (tit *TblInventoryTag) Value(name string) (ent.Value, error) {
 	return tit.selectValues.Get(name)
 }
 
-// QueryTagID queries the "tag_Id" edge of the TblInventoryTag entity.
-func (tit *TblInventoryTag) QueryTagID() *TblTagQuery {
-	return NewTblInventoryTagClient(tit.config).QueryTagID(tit)
+// QueryInventory queries the "inventory" edge of the TblInventoryTag entity.
+func (tit *TblInventoryTag) QueryInventory() *TblInventoryQuery {
+	return NewTblInventoryTagClient(tit.config).QueryInventory(tit)
 }
 
-// QueryInventoryID queries the "inventory_Id" edge of the TblInventoryTag entity.
-func (tit *TblInventoryTag) QueryInventoryID() *TblInventoryQuery {
-	return NewTblInventoryTagClient(tit.config).QueryInventoryID(tit)
+// QueryTag queries the "tag" edge of the TblInventoryTag entity.
+func (tit *TblInventoryTag) QueryTag() *TblTagQuery {
+	return NewTblInventoryTagClient(tit.config).QueryTag(tit)
 }
 
 // Update returns a builder for updating this TblInventoryTag.

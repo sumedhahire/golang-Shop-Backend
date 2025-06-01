@@ -3881,9 +3881,9 @@ type TblInventoryMutation struct {
 	_Updated_at              *time.Time
 	_Deleted_at              *time.Time
 	clearedFields            map[string]struct{}
-	inventory                map[string]struct{}
-	removedinventory         map[string]struct{}
-	clearedinventory         bool
+	inventoryTag             map[string]struct{}
+	removedinventoryTag      map[string]struct{}
+	clearedinventoryTag      bool
 	_InventoryCart           map[string]struct{}
 	removed_InventoryCart    map[string]struct{}
 	cleared_InventoryCart    bool
@@ -4320,58 +4320,58 @@ func (m *TblInventoryMutation) ResetDeletedAt() {
 	delete(m.clearedFields, tblinventory.FieldDeletedAt)
 }
 
-// AddInventoryIDs adds the "inventory" edge to the TblInventoryTag entity by ids.
-func (m *TblInventoryMutation) AddInventoryIDs(ids ...string) {
-	if m.inventory == nil {
-		m.inventory = make(map[string]struct{})
+// AddInventoryTagIDs adds the "inventoryTag" edge to the TblInventoryTag entity by ids.
+func (m *TblInventoryMutation) AddInventoryTagIDs(ids ...string) {
+	if m.inventoryTag == nil {
+		m.inventoryTag = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.inventory[ids[i]] = struct{}{}
+		m.inventoryTag[ids[i]] = struct{}{}
 	}
 }
 
-// ClearInventory clears the "inventory" edge to the TblInventoryTag entity.
-func (m *TblInventoryMutation) ClearInventory() {
-	m.clearedinventory = true
+// ClearInventoryTag clears the "inventoryTag" edge to the TblInventoryTag entity.
+func (m *TblInventoryMutation) ClearInventoryTag() {
+	m.clearedinventoryTag = true
 }
 
-// InventoryCleared reports if the "inventory" edge to the TblInventoryTag entity was cleared.
-func (m *TblInventoryMutation) InventoryCleared() bool {
-	return m.clearedinventory
+// InventoryTagCleared reports if the "inventoryTag" edge to the TblInventoryTag entity was cleared.
+func (m *TblInventoryMutation) InventoryTagCleared() bool {
+	return m.clearedinventoryTag
 }
 
-// RemoveInventoryIDs removes the "inventory" edge to the TblInventoryTag entity by IDs.
-func (m *TblInventoryMutation) RemoveInventoryIDs(ids ...string) {
-	if m.removedinventory == nil {
-		m.removedinventory = make(map[string]struct{})
+// RemoveInventoryTagIDs removes the "inventoryTag" edge to the TblInventoryTag entity by IDs.
+func (m *TblInventoryMutation) RemoveInventoryTagIDs(ids ...string) {
+	if m.removedinventoryTag == nil {
+		m.removedinventoryTag = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.inventory, ids[i])
-		m.removedinventory[ids[i]] = struct{}{}
+		delete(m.inventoryTag, ids[i])
+		m.removedinventoryTag[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedInventory returns the removed IDs of the "inventory" edge to the TblInventoryTag entity.
-func (m *TblInventoryMutation) RemovedInventoryIDs() (ids []string) {
-	for id := range m.removedinventory {
+// RemovedInventoryTag returns the removed IDs of the "inventoryTag" edge to the TblInventoryTag entity.
+func (m *TblInventoryMutation) RemovedInventoryTagIDs() (ids []string) {
+	for id := range m.removedinventoryTag {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// InventoryIDs returns the "inventory" edge IDs in the mutation.
-func (m *TblInventoryMutation) InventoryIDs() (ids []string) {
-	for id := range m.inventory {
+// InventoryTagIDs returns the "inventoryTag" edge IDs in the mutation.
+func (m *TblInventoryMutation) InventoryTagIDs() (ids []string) {
+	for id := range m.inventoryTag {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetInventory resets all changes to the "inventory" edge.
-func (m *TblInventoryMutation) ResetInventory() {
-	m.inventory = nil
-	m.clearedinventory = false
-	m.removedinventory = nil
+// ResetInventoryTag resets all changes to the "inventoryTag" edge.
+func (m *TblInventoryMutation) ResetInventoryTag() {
+	m.inventoryTag = nil
+	m.clearedinventoryTag = false
+	m.removedinventoryTag = nil
 }
 
 // AddInventoryCartIDs adds the "InventoryCart" edge to the TblCart entity by ids.
@@ -4759,8 +4759,8 @@ func (m *TblInventoryMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TblInventoryMutation) AddedEdges() []string {
 	edges := make([]string, 0, 3)
-	if m.inventory != nil {
-		edges = append(edges, tblinventory.EdgeInventory)
+	if m.inventoryTag != nil {
+		edges = append(edges, tblinventory.EdgeInventoryTag)
 	}
 	if m._InventoryCart != nil {
 		edges = append(edges, tblinventory.EdgeInventoryCart)
@@ -4775,9 +4775,9 @@ func (m *TblInventoryMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *TblInventoryMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case tblinventory.EdgeInventory:
-		ids := make([]ent.Value, 0, len(m.inventory))
-		for id := range m.inventory {
+	case tblinventory.EdgeInventoryTag:
+		ids := make([]ent.Value, 0, len(m.inventoryTag))
+		for id := range m.inventoryTag {
 			ids = append(ids, id)
 		}
 		return ids
@@ -4800,8 +4800,8 @@ func (m *TblInventoryMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TblInventoryMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 3)
-	if m.removedinventory != nil {
-		edges = append(edges, tblinventory.EdgeInventory)
+	if m.removedinventoryTag != nil {
+		edges = append(edges, tblinventory.EdgeInventoryTag)
 	}
 	if m.removed_InventoryCart != nil {
 		edges = append(edges, tblinventory.EdgeInventoryCart)
@@ -4816,9 +4816,9 @@ func (m *TblInventoryMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *TblInventoryMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case tblinventory.EdgeInventory:
-		ids := make([]ent.Value, 0, len(m.removedinventory))
-		for id := range m.removedinventory {
+	case tblinventory.EdgeInventoryTag:
+		ids := make([]ent.Value, 0, len(m.removedinventoryTag))
+		for id := range m.removedinventoryTag {
 			ids = append(ids, id)
 		}
 		return ids
@@ -4841,8 +4841,8 @@ func (m *TblInventoryMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TblInventoryMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 3)
-	if m.clearedinventory {
-		edges = append(edges, tblinventory.EdgeInventory)
+	if m.clearedinventoryTag {
+		edges = append(edges, tblinventory.EdgeInventoryTag)
 	}
 	if m.cleared_InventoryCart {
 		edges = append(edges, tblinventory.EdgeInventoryCart)
@@ -4857,8 +4857,8 @@ func (m *TblInventoryMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *TblInventoryMutation) EdgeCleared(name string) bool {
 	switch name {
-	case tblinventory.EdgeInventory:
-		return m.clearedinventory
+	case tblinventory.EdgeInventoryTag:
+		return m.clearedinventoryTag
 	case tblinventory.EdgeInventoryCart:
 		return m.cleared_InventoryCart
 	case tblinventory.EdgeInventoryPayment:
@@ -4879,8 +4879,8 @@ func (m *TblInventoryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *TblInventoryMutation) ResetEdge(name string) error {
 	switch name {
-	case tblinventory.EdgeInventory:
-		m.ResetInventory()
+	case tblinventory.EdgeInventoryTag:
+		m.ResetInventoryTag()
 		return nil
 	case tblinventory.EdgeInventoryCart:
 		m.ResetInventoryCart()
@@ -4895,22 +4895,20 @@ func (m *TblInventoryMutation) ResetEdge(name string) error {
 // TblInventoryTagMutation represents an operation that mutates the TblInventoryTag nodes in the graph.
 type TblInventoryTagMutation struct {
 	config
-	op                  Op
-	typ                 string
-	id                  *string
-	_InventoryId        *string
-	_TagId              *string
-	_Created_at         *time.Time
-	_Updated_at         *time.Time
-	_Deleted_at         *time.Time
-	clearedFields       map[string]struct{}
-	tag_Id              *string
-	clearedtag_Id       bool
-	inventory_Id        *string
-	clearedinventory_Id bool
-	done                bool
-	oldValue            func(context.Context) (*TblInventoryTag, error)
-	predicates          []predicate.TblInventoryTag
+	op               Op
+	typ              string
+	id               *string
+	_Created_at      *time.Time
+	_Updated_at      *time.Time
+	_Deleted_at      *time.Time
+	clearedFields    map[string]struct{}
+	inventory        *string
+	clearedinventory bool
+	tag              *string
+	clearedtag       bool
+	done             bool
+	oldValue         func(context.Context) (*TblInventoryTag, error)
+	predicates       []predicate.TblInventoryTag
 }
 
 var _ ent.Mutation = (*TblInventoryTagMutation)(nil)
@@ -5019,12 +5017,12 @@ func (m *TblInventoryTagMutation) IDs(ctx context.Context) ([]string, error) {
 
 // SetInventoryId sets the "InventoryId" field.
 func (m *TblInventoryTagMutation) SetInventoryId(s string) {
-	m._InventoryId = &s
+	m.inventory = &s
 }
 
 // InventoryId returns the value of the "InventoryId" field in the mutation.
 func (m *TblInventoryTagMutation) InventoryId() (r string, exists bool) {
-	v := m._InventoryId
+	v := m.inventory
 	if v == nil {
 		return
 	}
@@ -5050,7 +5048,7 @@ func (m *TblInventoryTagMutation) OldInventoryId(ctx context.Context) (v string,
 
 // ClearInventoryId clears the value of the "InventoryId" field.
 func (m *TblInventoryTagMutation) ClearInventoryId() {
-	m._InventoryId = nil
+	m.inventory = nil
 	m.clearedFields[tblinventorytag.FieldInventoryId] = struct{}{}
 }
 
@@ -5062,18 +5060,18 @@ func (m *TblInventoryTagMutation) InventoryIdCleared() bool {
 
 // ResetInventoryId resets all changes to the "InventoryId" field.
 func (m *TblInventoryTagMutation) ResetInventoryId() {
-	m._InventoryId = nil
+	m.inventory = nil
 	delete(m.clearedFields, tblinventorytag.FieldInventoryId)
 }
 
 // SetTagId sets the "TagId" field.
 func (m *TblInventoryTagMutation) SetTagId(s string) {
-	m._TagId = &s
+	m.tag = &s
 }
 
 // TagId returns the value of the "TagId" field in the mutation.
 func (m *TblInventoryTagMutation) TagId() (r string, exists bool) {
-	v := m._TagId
+	v := m.tag
 	if v == nil {
 		return
 	}
@@ -5099,7 +5097,7 @@ func (m *TblInventoryTagMutation) OldTagId(ctx context.Context) (v string, err e
 
 // ClearTagId clears the value of the "TagId" field.
 func (m *TblInventoryTagMutation) ClearTagId() {
-	m._TagId = nil
+	m.tag = nil
 	m.clearedFields[tblinventorytag.FieldTagId] = struct{}{}
 }
 
@@ -5111,7 +5109,7 @@ func (m *TblInventoryTagMutation) TagIdCleared() bool {
 
 // ResetTagId resets all changes to the "TagId" field.
 func (m *TblInventoryTagMutation) ResetTagId() {
-	m._TagId = nil
+	m.tag = nil
 	delete(m.clearedFields, tblinventorytag.FieldTagId)
 }
 
@@ -5218,87 +5216,102 @@ func (m *TblInventoryTagMutation) OldDeletedAt(ctx context.Context) (v *time.Tim
 	return oldValue.DeletedAt, nil
 }
 
+// ClearDeletedAt clears the value of the "Deleted_at" field.
+func (m *TblInventoryTagMutation) ClearDeletedAt() {
+	m._Deleted_at = nil
+	m.clearedFields[tblinventorytag.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "Deleted_at" field was cleared in this mutation.
+func (m *TblInventoryTagMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[tblinventorytag.FieldDeletedAt]
+	return ok
+}
+
 // ResetDeletedAt resets all changes to the "Deleted_at" field.
 func (m *TblInventoryTagMutation) ResetDeletedAt() {
 	m._Deleted_at = nil
+	delete(m.clearedFields, tblinventorytag.FieldDeletedAt)
 }
 
-// SetTagIDID sets the "tag_Id" edge to the TblTag entity by id.
-func (m *TblInventoryTagMutation) SetTagIDID(id string) {
-	m.tag_Id = &id
+// SetInventoryID sets the "inventory" edge to the TblInventory entity by id.
+func (m *TblInventoryTagMutation) SetInventoryID(id string) {
+	m.inventory = &id
 }
 
-// ClearTagID clears the "tag_Id" edge to the TblTag entity.
-func (m *TblInventoryTagMutation) ClearTagID() {
-	m.clearedtag_Id = true
+// ClearInventory clears the "inventory" edge to the TblInventory entity.
+func (m *TblInventoryTagMutation) ClearInventory() {
+	m.clearedinventory = true
+	m.clearedFields[tblinventorytag.FieldInventoryId] = struct{}{}
 }
 
-// TagIDCleared reports if the "tag_Id" edge to the TblTag entity was cleared.
-func (m *TblInventoryTagMutation) TagIDCleared() bool {
-	return m.clearedtag_Id
+// InventoryCleared reports if the "inventory" edge to the TblInventory entity was cleared.
+func (m *TblInventoryTagMutation) InventoryCleared() bool {
+	return m.InventoryIdCleared() || m.clearedinventory
 }
 
-// TagIDID returns the "tag_Id" edge ID in the mutation.
-func (m *TblInventoryTagMutation) TagIDID() (id string, exists bool) {
-	if m.tag_Id != nil {
-		return *m.tag_Id, true
+// InventoryID returns the "inventory" edge ID in the mutation.
+func (m *TblInventoryTagMutation) InventoryID() (id string, exists bool) {
+	if m.inventory != nil {
+		return *m.inventory, true
 	}
 	return
 }
 
-// TagIDIDs returns the "tag_Id" edge IDs in the mutation.
+// InventoryIDs returns the "inventory" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// TagIDID instead. It exists only for internal usage by the builders.
-func (m *TblInventoryTagMutation) TagIDIDs() (ids []string) {
-	if id := m.tag_Id; id != nil {
+// InventoryID instead. It exists only for internal usage by the builders.
+func (m *TblInventoryTagMutation) InventoryIDs() (ids []string) {
+	if id := m.inventory; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetTagID resets all changes to the "tag_Id" edge.
-func (m *TblInventoryTagMutation) ResetTagID() {
-	m.tag_Id = nil
-	m.clearedtag_Id = false
+// ResetInventory resets all changes to the "inventory" edge.
+func (m *TblInventoryTagMutation) ResetInventory() {
+	m.inventory = nil
+	m.clearedinventory = false
 }
 
-// SetInventoryIDID sets the "inventory_Id" edge to the TblInventory entity by id.
-func (m *TblInventoryTagMutation) SetInventoryIDID(id string) {
-	m.inventory_Id = &id
+// SetTagID sets the "tag" edge to the TblTag entity by id.
+func (m *TblInventoryTagMutation) SetTagID(id string) {
+	m.tag = &id
 }
 
-// ClearInventoryID clears the "inventory_Id" edge to the TblInventory entity.
-func (m *TblInventoryTagMutation) ClearInventoryID() {
-	m.clearedinventory_Id = true
+// ClearTag clears the "tag" edge to the TblTag entity.
+func (m *TblInventoryTagMutation) ClearTag() {
+	m.clearedtag = true
+	m.clearedFields[tblinventorytag.FieldTagId] = struct{}{}
 }
 
-// InventoryIDCleared reports if the "inventory_Id" edge to the TblInventory entity was cleared.
-func (m *TblInventoryTagMutation) InventoryIDCleared() bool {
-	return m.clearedinventory_Id
+// TagCleared reports if the "tag" edge to the TblTag entity was cleared.
+func (m *TblInventoryTagMutation) TagCleared() bool {
+	return m.TagIdCleared() || m.clearedtag
 }
 
-// InventoryIDID returns the "inventory_Id" edge ID in the mutation.
-func (m *TblInventoryTagMutation) InventoryIDID() (id string, exists bool) {
-	if m.inventory_Id != nil {
-		return *m.inventory_Id, true
+// TagID returns the "tag" edge ID in the mutation.
+func (m *TblInventoryTagMutation) TagID() (id string, exists bool) {
+	if m.tag != nil {
+		return *m.tag, true
 	}
 	return
 }
 
-// InventoryIDIDs returns the "inventory_Id" edge IDs in the mutation.
+// TagIDs returns the "tag" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// InventoryIDID instead. It exists only for internal usage by the builders.
-func (m *TblInventoryTagMutation) InventoryIDIDs() (ids []string) {
-	if id := m.inventory_Id; id != nil {
+// TagID instead. It exists only for internal usage by the builders.
+func (m *TblInventoryTagMutation) TagIDs() (ids []string) {
+	if id := m.tag; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetInventoryID resets all changes to the "inventory_Id" edge.
-func (m *TblInventoryTagMutation) ResetInventoryID() {
-	m.inventory_Id = nil
-	m.clearedinventory_Id = false
+// ResetTag resets all changes to the "tag" edge.
+func (m *TblInventoryTagMutation) ResetTag() {
+	m.tag = nil
+	m.clearedtag = false
 }
 
 // Where appends a list predicates to the TblInventoryTagMutation builder.
@@ -5336,10 +5349,10 @@ func (m *TblInventoryTagMutation) Type() string {
 // AddedFields().
 func (m *TblInventoryTagMutation) Fields() []string {
 	fields := make([]string, 0, 5)
-	if m._InventoryId != nil {
+	if m.inventory != nil {
 		fields = append(fields, tblinventorytag.FieldInventoryId)
 	}
-	if m._TagId != nil {
+	if m.tag != nil {
 		fields = append(fields, tblinventorytag.FieldTagId)
 	}
 	if m._Created_at != nil {
@@ -5468,6 +5481,9 @@ func (m *TblInventoryTagMutation) ClearedFields() []string {
 	if m.FieldCleared(tblinventorytag.FieldTagId) {
 		fields = append(fields, tblinventorytag.FieldTagId)
 	}
+	if m.FieldCleared(tblinventorytag.FieldDeletedAt) {
+		fields = append(fields, tblinventorytag.FieldDeletedAt)
+	}
 	return fields
 }
 
@@ -5487,6 +5503,9 @@ func (m *TblInventoryTagMutation) ClearField(name string) error {
 		return nil
 	case tblinventorytag.FieldTagId:
 		m.ClearTagId()
+		return nil
+	case tblinventorytag.FieldDeletedAt:
+		m.ClearDeletedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown TblInventoryTag nullable field %s", name)
@@ -5518,11 +5537,11 @@ func (m *TblInventoryTagMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TblInventoryTagMutation) AddedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.tag_Id != nil {
-		edges = append(edges, tblinventorytag.EdgeTagID)
+	if m.inventory != nil {
+		edges = append(edges, tblinventorytag.EdgeInventory)
 	}
-	if m.inventory_Id != nil {
-		edges = append(edges, tblinventorytag.EdgeInventoryID)
+	if m.tag != nil {
+		edges = append(edges, tblinventorytag.EdgeTag)
 	}
 	return edges
 }
@@ -5531,12 +5550,12 @@ func (m *TblInventoryTagMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *TblInventoryTagMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case tblinventorytag.EdgeTagID:
-		if id := m.tag_Id; id != nil {
+	case tblinventorytag.EdgeInventory:
+		if id := m.inventory; id != nil {
 			return []ent.Value{*id}
 		}
-	case tblinventorytag.EdgeInventoryID:
-		if id := m.inventory_Id; id != nil {
+	case tblinventorytag.EdgeTag:
+		if id := m.tag; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -5558,11 +5577,11 @@ func (m *TblInventoryTagMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TblInventoryTagMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.clearedtag_Id {
-		edges = append(edges, tblinventorytag.EdgeTagID)
+	if m.clearedinventory {
+		edges = append(edges, tblinventorytag.EdgeInventory)
 	}
-	if m.clearedinventory_Id {
-		edges = append(edges, tblinventorytag.EdgeInventoryID)
+	if m.clearedtag {
+		edges = append(edges, tblinventorytag.EdgeTag)
 	}
 	return edges
 }
@@ -5571,10 +5590,10 @@ func (m *TblInventoryTagMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *TblInventoryTagMutation) EdgeCleared(name string) bool {
 	switch name {
-	case tblinventorytag.EdgeTagID:
-		return m.clearedtag_Id
-	case tblinventorytag.EdgeInventoryID:
-		return m.clearedinventory_Id
+	case tblinventorytag.EdgeInventory:
+		return m.clearedinventory
+	case tblinventorytag.EdgeTag:
+		return m.clearedtag
 	}
 	return false
 }
@@ -5583,11 +5602,11 @@ func (m *TblInventoryTagMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *TblInventoryTagMutation) ClearEdge(name string) error {
 	switch name {
-	case tblinventorytag.EdgeTagID:
-		m.ClearTagID()
+	case tblinventorytag.EdgeInventory:
+		m.ClearInventory()
 		return nil
-	case tblinventorytag.EdgeInventoryID:
-		m.ClearInventoryID()
+	case tblinventorytag.EdgeTag:
+		m.ClearTag()
 		return nil
 	}
 	return fmt.Errorf("unknown TblInventoryTag unique edge %s", name)
@@ -5597,11 +5616,11 @@ func (m *TblInventoryTagMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *TblInventoryTagMutation) ResetEdge(name string) error {
 	switch name {
-	case tblinventorytag.EdgeTagID:
-		m.ResetTagID()
+	case tblinventorytag.EdgeInventory:
+		m.ResetInventory()
 		return nil
-	case tblinventorytag.EdgeInventoryID:
-		m.ResetInventoryID()
+	case tblinventorytag.EdgeTag:
+		m.ResetTag()
 		return nil
 	}
 	return fmt.Errorf("unknown TblInventoryTag edge %s", name)
@@ -6542,22 +6561,22 @@ func (m *TblPaymentMutation) ResetEdge(name string) error {
 // TblTagMutation represents an operation that mutates the TblTag nodes in the graph.
 type TblTagMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *string
-	_Name         *string
-	_Description  *string
-	_Is_Active    *bool
-	_Created_at   *time.Time
-	_Updated_at   *time.Time
-	_Deleted_at   *time.Time
-	clearedFields map[string]struct{}
-	tag           map[string]struct{}
-	removedtag    map[string]struct{}
-	clearedtag    bool
-	done          bool
-	oldValue      func(context.Context) (*TblTag, error)
-	predicates    []predicate.TblTag
+	op                  Op
+	typ                 string
+	id                  *string
+	_Name               *string
+	_Description        *string
+	_Is_Active          *bool
+	_Created_at         *time.Time
+	_Updated_at         *time.Time
+	_Deleted_at         *time.Time
+	clearedFields       map[string]struct{}
+	inventoryTag        map[string]struct{}
+	removedinventoryTag map[string]struct{}
+	clearedinventoryTag bool
+	done                bool
+	oldValue            func(context.Context) (*TblTag, error)
+	predicates          []predicate.TblTag
 }
 
 var _ ent.Mutation = (*TblTagMutation)(nil)
@@ -6893,58 +6912,58 @@ func (m *TblTagMutation) ResetDeletedAt() {
 	delete(m.clearedFields, tbltag.FieldDeletedAt)
 }
 
-// AddTagIDs adds the "tag" edge to the TblInventoryTag entity by ids.
-func (m *TblTagMutation) AddTagIDs(ids ...string) {
-	if m.tag == nil {
-		m.tag = make(map[string]struct{})
+// AddInventoryTagIDs adds the "inventoryTag" edge to the TblInventoryTag entity by ids.
+func (m *TblTagMutation) AddInventoryTagIDs(ids ...string) {
+	if m.inventoryTag == nil {
+		m.inventoryTag = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.tag[ids[i]] = struct{}{}
+		m.inventoryTag[ids[i]] = struct{}{}
 	}
 }
 
-// ClearTag clears the "tag" edge to the TblInventoryTag entity.
-func (m *TblTagMutation) ClearTag() {
-	m.clearedtag = true
+// ClearInventoryTag clears the "inventoryTag" edge to the TblInventoryTag entity.
+func (m *TblTagMutation) ClearInventoryTag() {
+	m.clearedinventoryTag = true
 }
 
-// TagCleared reports if the "tag" edge to the TblInventoryTag entity was cleared.
-func (m *TblTagMutation) TagCleared() bool {
-	return m.clearedtag
+// InventoryTagCleared reports if the "inventoryTag" edge to the TblInventoryTag entity was cleared.
+func (m *TblTagMutation) InventoryTagCleared() bool {
+	return m.clearedinventoryTag
 }
 
-// RemoveTagIDs removes the "tag" edge to the TblInventoryTag entity by IDs.
-func (m *TblTagMutation) RemoveTagIDs(ids ...string) {
-	if m.removedtag == nil {
-		m.removedtag = make(map[string]struct{})
+// RemoveInventoryTagIDs removes the "inventoryTag" edge to the TblInventoryTag entity by IDs.
+func (m *TblTagMutation) RemoveInventoryTagIDs(ids ...string) {
+	if m.removedinventoryTag == nil {
+		m.removedinventoryTag = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.tag, ids[i])
-		m.removedtag[ids[i]] = struct{}{}
+		delete(m.inventoryTag, ids[i])
+		m.removedinventoryTag[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedTag returns the removed IDs of the "tag" edge to the TblInventoryTag entity.
-func (m *TblTagMutation) RemovedTagIDs() (ids []string) {
-	for id := range m.removedtag {
+// RemovedInventoryTag returns the removed IDs of the "inventoryTag" edge to the TblInventoryTag entity.
+func (m *TblTagMutation) RemovedInventoryTagIDs() (ids []string) {
+	for id := range m.removedinventoryTag {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// TagIDs returns the "tag" edge IDs in the mutation.
-func (m *TblTagMutation) TagIDs() (ids []string) {
-	for id := range m.tag {
+// InventoryTagIDs returns the "inventoryTag" edge IDs in the mutation.
+func (m *TblTagMutation) InventoryTagIDs() (ids []string) {
+	for id := range m.inventoryTag {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetTag resets all changes to the "tag" edge.
-func (m *TblTagMutation) ResetTag() {
-	m.tag = nil
-	m.clearedtag = false
-	m.removedtag = nil
+// ResetInventoryTag resets all changes to the "inventoryTag" edge.
+func (m *TblTagMutation) ResetInventoryTag() {
+	m.inventoryTag = nil
+	m.clearedinventoryTag = false
+	m.removedinventoryTag = nil
 }
 
 // Where appends a list predicates to the TblTagMutation builder.
@@ -7175,8 +7194,8 @@ func (m *TblTagMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TblTagMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.tag != nil {
-		edges = append(edges, tbltag.EdgeTag)
+	if m.inventoryTag != nil {
+		edges = append(edges, tbltag.EdgeInventoryTag)
 	}
 	return edges
 }
@@ -7185,9 +7204,9 @@ func (m *TblTagMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *TblTagMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case tbltag.EdgeTag:
-		ids := make([]ent.Value, 0, len(m.tag))
-		for id := range m.tag {
+	case tbltag.EdgeInventoryTag:
+		ids := make([]ent.Value, 0, len(m.inventoryTag))
+		for id := range m.inventoryTag {
 			ids = append(ids, id)
 		}
 		return ids
@@ -7198,8 +7217,8 @@ func (m *TblTagMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TblTagMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedtag != nil {
-		edges = append(edges, tbltag.EdgeTag)
+	if m.removedinventoryTag != nil {
+		edges = append(edges, tbltag.EdgeInventoryTag)
 	}
 	return edges
 }
@@ -7208,9 +7227,9 @@ func (m *TblTagMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *TblTagMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case tbltag.EdgeTag:
-		ids := make([]ent.Value, 0, len(m.removedtag))
-		for id := range m.removedtag {
+	case tbltag.EdgeInventoryTag:
+		ids := make([]ent.Value, 0, len(m.removedinventoryTag))
+		for id := range m.removedinventoryTag {
 			ids = append(ids, id)
 		}
 		return ids
@@ -7221,8 +7240,8 @@ func (m *TblTagMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TblTagMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedtag {
-		edges = append(edges, tbltag.EdgeTag)
+	if m.clearedinventoryTag {
+		edges = append(edges, tbltag.EdgeInventoryTag)
 	}
 	return edges
 }
@@ -7231,8 +7250,8 @@ func (m *TblTagMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *TblTagMutation) EdgeCleared(name string) bool {
 	switch name {
-	case tbltag.EdgeTag:
-		return m.clearedtag
+	case tbltag.EdgeInventoryTag:
+		return m.clearedinventoryTag
 	}
 	return false
 }
@@ -7249,8 +7268,8 @@ func (m *TblTagMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *TblTagMutation) ResetEdge(name string) error {
 	switch name {
-	case tbltag.EdgeTag:
-		m.ResetTag()
+	case tbltag.EdgeInventoryTag:
+		m.ResetInventoryTag()
 		return nil
 	}
 	return fmt.Errorf("unknown TblTag edge %s", name)
@@ -7267,8 +7286,7 @@ type TblUserMutation struct {
 	email               *string
 	birth_date          *time.Time
 	password            *string
-	is_active           *int
-	addis_active        *int
+	is_active           *bool
 	zip_code            *int
 	addzip_code         *int
 	address             *string
@@ -7590,13 +7608,12 @@ func (m *TblUserMutation) ResetPassword() {
 }
 
 // SetIsActive sets the "is_active" field.
-func (m *TblUserMutation) SetIsActive(i int) {
-	m.is_active = &i
-	m.addis_active = nil
+func (m *TblUserMutation) SetIsActive(b bool) {
+	m.is_active = &b
 }
 
 // IsActive returns the value of the "is_active" field in the mutation.
-func (m *TblUserMutation) IsActive() (r int, exists bool) {
+func (m *TblUserMutation) IsActive() (r bool, exists bool) {
 	v := m.is_active
 	if v == nil {
 		return
@@ -7607,7 +7624,7 @@ func (m *TblUserMutation) IsActive() (r int, exists bool) {
 // OldIsActive returns the old "is_active" field's value of the TblUser entity.
 // If the TblUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TblUserMutation) OldIsActive(ctx context.Context) (v int, err error) {
+func (m *TblUserMutation) OldIsActive(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsActive is only allowed on UpdateOne operations")
 	}
@@ -7621,28 +7638,9 @@ func (m *TblUserMutation) OldIsActive(ctx context.Context) (v int, err error) {
 	return oldValue.IsActive, nil
 }
 
-// AddIsActive adds i to the "is_active" field.
-func (m *TblUserMutation) AddIsActive(i int) {
-	if m.addis_active != nil {
-		*m.addis_active += i
-	} else {
-		m.addis_active = &i
-	}
-}
-
-// AddedIsActive returns the value that was added to the "is_active" field in this mutation.
-func (m *TblUserMutation) AddedIsActive() (r int, exists bool) {
-	v := m.addis_active
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ResetIsActive resets all changes to the "is_active" field.
 func (m *TblUserMutation) ResetIsActive() {
 	m.is_active = nil
-	m.addis_active = nil
 }
 
 // SetZipCode sets the "zip_code" field.
@@ -8320,7 +8318,7 @@ func (m *TblUserMutation) SetField(name string, value ent.Value) error {
 		m.SetPassword(v)
 		return nil
 	case tbluser.FieldIsActive:
-		v, ok := value.(int)
+		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -8383,9 +8381,6 @@ func (m *TblUserMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *TblUserMutation) AddedFields() []string {
 	var fields []string
-	if m.addis_active != nil {
-		fields = append(fields, tbluser.FieldIsActive)
-	}
 	if m.addzip_code != nil {
 		fields = append(fields, tbluser.FieldZipCode)
 	}
@@ -8397,8 +8392,6 @@ func (m *TblUserMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *TblUserMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case tbluser.FieldIsActive:
-		return m.AddedIsActive()
 	case tbluser.FieldZipCode:
 		return m.AddedZipCode()
 	}
@@ -8410,13 +8403,6 @@ func (m *TblUserMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *TblUserMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case tbluser.FieldIsActive:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddIsActive(v)
-		return nil
 	case tbluser.FieldZipCode:
 		v, ok := value.(int)
 		if !ok {

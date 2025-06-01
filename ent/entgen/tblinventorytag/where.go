@@ -360,21 +360,31 @@ func DeletedAtLTE(v time.Time) predicate.TblInventoryTag {
 	return predicate.TblInventoryTag(sql.FieldLTE(FieldDeletedAt, v))
 }
 
-// HasTagID applies the HasEdge predicate on the "tag_Id" edge.
-func HasTagID() predicate.TblInventoryTag {
+// DeletedAtIsNil applies the IsNil predicate on the "Deleted_at" field.
+func DeletedAtIsNil() predicate.TblInventoryTag {
+	return predicate.TblInventoryTag(sql.FieldIsNull(FieldDeletedAt))
+}
+
+// DeletedAtNotNil applies the NotNil predicate on the "Deleted_at" field.
+func DeletedAtNotNil() predicate.TblInventoryTag {
+	return predicate.TblInventoryTag(sql.FieldNotNull(FieldDeletedAt))
+}
+
+// HasInventory applies the HasEdge predicate on the "inventory" edge.
+func HasInventory() predicate.TblInventoryTag {
 	return predicate.TblInventoryTag(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, TagIDTable, TagIDColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, InventoryTable, InventoryColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasTagIDWith applies the HasEdge predicate on the "tag_Id" edge with a given conditions (other predicates).
-func HasTagIDWith(preds ...predicate.TblTag) predicate.TblInventoryTag {
+// HasInventoryWith applies the HasEdge predicate on the "inventory" edge with a given conditions (other predicates).
+func HasInventoryWith(preds ...predicate.TblInventory) predicate.TblInventoryTag {
 	return predicate.TblInventoryTag(func(s *sql.Selector) {
-		step := newTagIDStep()
+		step := newInventoryStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -383,21 +393,21 @@ func HasTagIDWith(preds ...predicate.TblTag) predicate.TblInventoryTag {
 	})
 }
 
-// HasInventoryID applies the HasEdge predicate on the "inventory_Id" edge.
-func HasInventoryID() predicate.TblInventoryTag {
+// HasTag applies the HasEdge predicate on the "tag" edge.
+func HasTag() predicate.TblInventoryTag {
 	return predicate.TblInventoryTag(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, InventoryIDTable, InventoryIDColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, TagTable, TagColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasInventoryIDWith applies the HasEdge predicate on the "inventory_Id" edge with a given conditions (other predicates).
-func HasInventoryIDWith(preds ...predicate.TblInventory) predicate.TblInventoryTag {
+// HasTagWith applies the HasEdge predicate on the "tag" edge with a given conditions (other predicates).
+func HasTagWith(preds ...predicate.TblTag) predicate.TblInventoryTag {
 	return predicate.TblInventoryTag(func(s *sql.Selector) {
-		step := newInventoryIDStep()
+		step := newTagStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -14,6 +14,7 @@ type User struct {
 	Password  string
 	Address   string
 	Role      string
+	IsActive  bool
 }
 
 func (user *User) MapFrom(entUser *entgen.TblUser) {
@@ -24,6 +25,7 @@ func (user *User) MapFrom(entUser *entgen.TblUser) {
 	user.LastName = entUser.Lastname
 	user.BirthDate = *entUser.BirthDate
 	user.Role = string(entUser.Role)
+	user.IsActive = entUser.IsActive
 }
 
 type RSUser struct {
@@ -33,6 +35,7 @@ type RSUser struct {
 	Address   string    `json:"address"`
 	BirthDate time.Time `json:"birthDate"`
 	Role      string    `json:"role"`
+	IsActive  bool      `json:"isActive"`
 }
 
 func (rs *RSUser) MapFrom(user *User) {
@@ -42,4 +45,5 @@ func (rs *RSUser) MapFrom(user *User) {
 	rs.Address = user.Address
 	rs.BirthDate = user.BirthDate
 	rs.Role = user.Role
+	rs.IsActive = user.IsActive
 }

@@ -28,7 +28,7 @@ type TblUser struct {
 	// Password holds the value of the "password" field.
 	Password string `json:"password,omitempty"`
 	// IsActive holds the value of the "is_active" field.
-	IsActive int `json:"is_active,omitempty"`
+	IsActive bool `json:"is_active,omitempty"`
 	// ZipCode holds the value of the "zip_code" field.
 	ZipCode *int `json:"zip_code,omitempty"`
 	// Address holds the value of the "address" field.
@@ -94,7 +94,9 @@ func (*TblUser) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case tbluser.FieldIsActive, tbluser.FieldZipCode:
+		case tbluser.FieldIsActive:
+			values[i] = new(sql.NullBool)
+		case tbluser.FieldZipCode:
 			values[i] = new(sql.NullInt64)
 		case tbluser.FieldID, tbluser.FieldFirstname, tbluser.FieldLastname, tbluser.FieldEmail, tbluser.FieldPassword, tbluser.FieldAddress, tbluser.FieldIPAddress, tbluser.FieldRole:
 			values[i] = new(sql.NullString)
@@ -153,10 +155,10 @@ func (tu *TblUser) assignValues(columns []string, values []any) error {
 				tu.Password = value.String
 			}
 		case tbluser.FieldIsActive:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_active", values[i])
 			} else if value.Valid {
-				tu.IsActive = int(value.Int64)
+				tu.IsActive = value.Bool
 			}
 		case tbluser.FieldZipCode:
 			if value, ok := values[i].(*sql.NullInt64); !ok {

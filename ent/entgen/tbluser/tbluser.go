@@ -114,7 +114,7 @@ var (
 	// PasswordValidator is a validator for the "password" field. It is called by the builders before save.
 	PasswordValidator func(string) error
 	// DefaultIsActive holds the default value on creation for the "is_active" field.
-	DefaultIsActive int
+	DefaultIsActive bool
 	// IPAddressValidator is a validator for the "ip_address" field. It is called by the builders before save.
 	IPAddressValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

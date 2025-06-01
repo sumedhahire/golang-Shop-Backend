@@ -108,23 +108,16 @@ func (tuu *TblUserUpdate) SetNillablePassword(s *string) *TblUserUpdate {
 }
 
 // SetIsActive sets the "is_active" field.
-func (tuu *TblUserUpdate) SetIsActive(i int) *TblUserUpdate {
-	tuu.mutation.ResetIsActive()
-	tuu.mutation.SetIsActive(i)
+func (tuu *TblUserUpdate) SetIsActive(b bool) *TblUserUpdate {
+	tuu.mutation.SetIsActive(b)
 	return tuu
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (tuu *TblUserUpdate) SetNillableIsActive(i *int) *TblUserUpdate {
-	if i != nil {
-		tuu.SetIsActive(*i)
+func (tuu *TblUserUpdate) SetNillableIsActive(b *bool) *TblUserUpdate {
+	if b != nil {
+		tuu.SetIsActive(*b)
 	}
-	return tuu
-}
-
-// AddIsActive adds i to the "is_active" field.
-func (tuu *TblUserUpdate) AddIsActive(i int) *TblUserUpdate {
-	tuu.mutation.AddIsActive(i)
 	return tuu
 }
 
@@ -464,10 +457,7 @@ func (tuu *TblUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(tbluser.FieldPassword, field.TypeString, value)
 	}
 	if value, ok := tuu.mutation.IsActive(); ok {
-		_spec.SetField(tbluser.FieldIsActive, field.TypeInt, value)
-	}
-	if value, ok := tuu.mutation.AddedIsActive(); ok {
-		_spec.AddField(tbluser.FieldIsActive, field.TypeInt, value)
+		_spec.SetField(tbluser.FieldIsActive, field.TypeBool, value)
 	}
 	if value, ok := tuu.mutation.ZipCode(); ok {
 		_spec.SetField(tbluser.FieldZipCode, field.TypeInt, value)
@@ -737,23 +727,16 @@ func (tuuo *TblUserUpdateOne) SetNillablePassword(s *string) *TblUserUpdateOne {
 }
 
 // SetIsActive sets the "is_active" field.
-func (tuuo *TblUserUpdateOne) SetIsActive(i int) *TblUserUpdateOne {
-	tuuo.mutation.ResetIsActive()
-	tuuo.mutation.SetIsActive(i)
+func (tuuo *TblUserUpdateOne) SetIsActive(b bool) *TblUserUpdateOne {
+	tuuo.mutation.SetIsActive(b)
 	return tuuo
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (tuuo *TblUserUpdateOne) SetNillableIsActive(i *int) *TblUserUpdateOne {
-	if i != nil {
-		tuuo.SetIsActive(*i)
+func (tuuo *TblUserUpdateOne) SetNillableIsActive(b *bool) *TblUserUpdateOne {
+	if b != nil {
+		tuuo.SetIsActive(*b)
 	}
-	return tuuo
-}
-
-// AddIsActive adds i to the "is_active" field.
-func (tuuo *TblUserUpdateOne) AddIsActive(i int) *TblUserUpdateOne {
-	tuuo.mutation.AddIsActive(i)
 	return tuuo
 }
 
@@ -1123,10 +1106,7 @@ func (tuuo *TblUserUpdateOne) sqlSave(ctx context.Context) (_node *TblUser, err 
 		_spec.SetField(tbluser.FieldPassword, field.TypeString, value)
 	}
 	if value, ok := tuuo.mutation.IsActive(); ok {
-		_spec.SetField(tbluser.FieldIsActive, field.TypeInt, value)
-	}
-	if value, ok := tuuo.mutation.AddedIsActive(); ok {
-		_spec.AddField(tbluser.FieldIsActive, field.TypeInt, value)
+		_spec.SetField(tbluser.FieldIsActive, field.TypeBool, value)
 	}
 	if value, ok := tuuo.mutation.ZipCode(); ok {
 		_spec.SetField(tbluser.FieldZipCode, field.TypeInt, value)

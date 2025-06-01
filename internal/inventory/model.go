@@ -21,7 +21,7 @@ type (
 	Inventory struct {
 		Id          string
 		Name        string
-		Tags        []Tag
+		Tags        []string
 		Price       float32
 		Description string
 		ImageUrl    string
@@ -32,19 +32,17 @@ type (
 		DeletedAt time.Time
 	}
 
-	Tag struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		IsActive    bool   `json:"is_active"`
+	TagData struct {
+		Name []string `json:"tags"`
 	}
 
 	RSInventory struct {
-		Id          string  `json:"id"`
-		Name        string  `json:"name"`
-		Description string  `json:"description"`
-		Tags        []Tag   `json:"tags"`
-		Price       float32 `json:"price"`
-		ImageUrl    string  `json:"imageUrl"`
+		Id          string   `json:"id"`
+		Name        string   `json:"name"`
+		Description string   `json:"description"`
+		Tags        []string `json:"tags"`
+		Price       float32  `json:"price"`
+		ImageUrl    string   `json:"imageUrl"`
 	}
 
 	Filter struct {
@@ -55,9 +53,6 @@ type (
 func (inventory *Inventory) MapTo(entInventory *entgen.TblInventory) {
 	inventory.Id = entInventory.ID
 	inventory.Name = entInventory.Name
-	for _, tag := range inventory.Tags {
-		inventory.Tags = append(inventory.Tags, tag)
-	}
 	inventory.ImageUrl = entInventory.ImageLink
 	inventory.Price = entInventory.Price
 	inventory.Description = entInventory.Description
@@ -81,7 +76,7 @@ func (rq *RQInventory) MapFrom() Inventory {
 	inventory.Id = uuid.NewString()
 	inventory.Name = rq.Name
 	inventory.Description = rq.Description
-	//	inventory.Tags = rq.Tag
+	inventory.Tags = rq.Tag
 	inventory.Price = rq.Price
 	inventory.IsActive = rq.IsActive
 	return inventory

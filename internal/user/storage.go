@@ -2,11 +2,14 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"inventory/ent/entgen"
+	"inventory/internal/util"
 )
 
 type IUserStorage interface {
 	Get(ctx context.Context, id string) (*User, error)
+	List(ctx context.Context) ([]User, error)
 }
 
 type sStorage struct {
@@ -26,4 +29,36 @@ func (s sStorage) Get(ctx context.Context, id string) (*User, error) {
 	var user User
 	user.MapFrom(entUser)
 	return &user, nil
+}
+
+func (s sStorage) List(ctx context.Context) ([]User, error) {
+	entUser, err := list(s.client).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	users := make([]User, len(entUser))
+	for index, value := range entUser {
+		users[index].MapFrom(value)
+	}
+
+	return users, nil
+}
+
+func (s sStorage) ChangeActive(ctx context.Context, id string) error {
+	err := util.ExecTx(ctx, s.client, func(tx *entgen.Tx) error {
+
+		err := activeUser(tx, id).Exec(ctx)
+		if err != nil {
+			return util.WrapperForDatabaseError("add", err)
+		}
+
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
 }

@@ -119,19 +119,19 @@ func (ttu *TblTagUpdate) ClearDeletedAt() *TblTagUpdate {
 	return ttu
 }
 
-// AddTagIDs adds the "tag" edge to the TblInventoryTag entity by IDs.
-func (ttu *TblTagUpdate) AddTagIDs(ids ...string) *TblTagUpdate {
-	ttu.mutation.AddTagIDs(ids...)
+// AddInventoryTagIDs adds the "inventoryTag" edge to the TblInventoryTag entity by IDs.
+func (ttu *TblTagUpdate) AddInventoryTagIDs(ids ...string) *TblTagUpdate {
+	ttu.mutation.AddInventoryTagIDs(ids...)
 	return ttu
 }
 
-// AddTag adds the "tag" edges to the TblInventoryTag entity.
-func (ttu *TblTagUpdate) AddTag(t ...*TblInventoryTag) *TblTagUpdate {
+// AddInventoryTag adds the "inventoryTag" edges to the TblInventoryTag entity.
+func (ttu *TblTagUpdate) AddInventoryTag(t ...*TblInventoryTag) *TblTagUpdate {
 	ids := make([]string, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
-	return ttu.AddTagIDs(ids...)
+	return ttu.AddInventoryTagIDs(ids...)
 }
 
 // Mutation returns the TblTagMutation object of the builder.
@@ -139,25 +139,25 @@ func (ttu *TblTagUpdate) Mutation() *TblTagMutation {
 	return ttu.mutation
 }
 
-// ClearTag clears all "tag" edges to the TblInventoryTag entity.
-func (ttu *TblTagUpdate) ClearTag() *TblTagUpdate {
-	ttu.mutation.ClearTag()
+// ClearInventoryTag clears all "inventoryTag" edges to the TblInventoryTag entity.
+func (ttu *TblTagUpdate) ClearInventoryTag() *TblTagUpdate {
+	ttu.mutation.ClearInventoryTag()
 	return ttu
 }
 
-// RemoveTagIDs removes the "tag" edge to TblInventoryTag entities by IDs.
-func (ttu *TblTagUpdate) RemoveTagIDs(ids ...string) *TblTagUpdate {
-	ttu.mutation.RemoveTagIDs(ids...)
+// RemoveInventoryTagIDs removes the "inventoryTag" edge to TblInventoryTag entities by IDs.
+func (ttu *TblTagUpdate) RemoveInventoryTagIDs(ids ...string) *TblTagUpdate {
+	ttu.mutation.RemoveInventoryTagIDs(ids...)
 	return ttu
 }
 
-// RemoveTag removes "tag" edges to TblInventoryTag entities.
-func (ttu *TblTagUpdate) RemoveTag(t ...*TblInventoryTag) *TblTagUpdate {
+// RemoveInventoryTag removes "inventoryTag" edges to TblInventoryTag entities.
+func (ttu *TblTagUpdate) RemoveInventoryTag(t ...*TblInventoryTag) *TblTagUpdate {
 	ids := make([]string, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
-	return ttu.RemoveTagIDs(ids...)
+	return ttu.RemoveInventoryTagIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -235,12 +235,12 @@ func (ttu *TblTagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if ttu.mutation.DeletedAtCleared() {
 		_spec.ClearField(tbltag.FieldDeletedAt, field.TypeTime)
 	}
-	if ttu.mutation.TagCleared() {
+	if ttu.mutation.InventoryTagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tbltag.TagTable,
-			Columns: []string{tbltag.TagColumn},
+			Table:   tbltag.InventoryTagTable,
+			Columns: []string{tbltag.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),
@@ -248,12 +248,12 @@ func (ttu *TblTagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ttu.mutation.RemovedTagIDs(); len(nodes) > 0 && !ttu.mutation.TagCleared() {
+	if nodes := ttu.mutation.RemovedInventoryTagIDs(); len(nodes) > 0 && !ttu.mutation.InventoryTagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tbltag.TagTable,
-			Columns: []string{tbltag.TagColumn},
+			Table:   tbltag.InventoryTagTable,
+			Columns: []string{tbltag.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),
@@ -264,12 +264,12 @@ func (ttu *TblTagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ttu.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := ttu.mutation.InventoryTagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tbltag.TagTable,
-			Columns: []string{tbltag.TagColumn},
+			Table:   tbltag.InventoryTagTable,
+			Columns: []string{tbltag.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),
@@ -390,19 +390,19 @@ func (ttuo *TblTagUpdateOne) ClearDeletedAt() *TblTagUpdateOne {
 	return ttuo
 }
 
-// AddTagIDs adds the "tag" edge to the TblInventoryTag entity by IDs.
-func (ttuo *TblTagUpdateOne) AddTagIDs(ids ...string) *TblTagUpdateOne {
-	ttuo.mutation.AddTagIDs(ids...)
+// AddInventoryTagIDs adds the "inventoryTag" edge to the TblInventoryTag entity by IDs.
+func (ttuo *TblTagUpdateOne) AddInventoryTagIDs(ids ...string) *TblTagUpdateOne {
+	ttuo.mutation.AddInventoryTagIDs(ids...)
 	return ttuo
 }
 
-// AddTag adds the "tag" edges to the TblInventoryTag entity.
-func (ttuo *TblTagUpdateOne) AddTag(t ...*TblInventoryTag) *TblTagUpdateOne {
+// AddInventoryTag adds the "inventoryTag" edges to the TblInventoryTag entity.
+func (ttuo *TblTagUpdateOne) AddInventoryTag(t ...*TblInventoryTag) *TblTagUpdateOne {
 	ids := make([]string, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
-	return ttuo.AddTagIDs(ids...)
+	return ttuo.AddInventoryTagIDs(ids...)
 }
 
 // Mutation returns the TblTagMutation object of the builder.
@@ -410,25 +410,25 @@ func (ttuo *TblTagUpdateOne) Mutation() *TblTagMutation {
 	return ttuo.mutation
 }
 
-// ClearTag clears all "tag" edges to the TblInventoryTag entity.
-func (ttuo *TblTagUpdateOne) ClearTag() *TblTagUpdateOne {
-	ttuo.mutation.ClearTag()
+// ClearInventoryTag clears all "inventoryTag" edges to the TblInventoryTag entity.
+func (ttuo *TblTagUpdateOne) ClearInventoryTag() *TblTagUpdateOne {
+	ttuo.mutation.ClearInventoryTag()
 	return ttuo
 }
 
-// RemoveTagIDs removes the "tag" edge to TblInventoryTag entities by IDs.
-func (ttuo *TblTagUpdateOne) RemoveTagIDs(ids ...string) *TblTagUpdateOne {
-	ttuo.mutation.RemoveTagIDs(ids...)
+// RemoveInventoryTagIDs removes the "inventoryTag" edge to TblInventoryTag entities by IDs.
+func (ttuo *TblTagUpdateOne) RemoveInventoryTagIDs(ids ...string) *TblTagUpdateOne {
+	ttuo.mutation.RemoveInventoryTagIDs(ids...)
 	return ttuo
 }
 
-// RemoveTag removes "tag" edges to TblInventoryTag entities.
-func (ttuo *TblTagUpdateOne) RemoveTag(t ...*TblInventoryTag) *TblTagUpdateOne {
+// RemoveInventoryTag removes "inventoryTag" edges to TblInventoryTag entities.
+func (ttuo *TblTagUpdateOne) RemoveInventoryTag(t ...*TblInventoryTag) *TblTagUpdateOne {
 	ids := make([]string, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
-	return ttuo.RemoveTagIDs(ids...)
+	return ttuo.RemoveInventoryTagIDs(ids...)
 }
 
 // Where appends a list predicates to the TblTagUpdate builder.
@@ -536,12 +536,12 @@ func (ttuo *TblTagUpdateOne) sqlSave(ctx context.Context) (_node *TblTag, err er
 	if ttuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(tbltag.FieldDeletedAt, field.TypeTime)
 	}
-	if ttuo.mutation.TagCleared() {
+	if ttuo.mutation.InventoryTagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tbltag.TagTable,
-			Columns: []string{tbltag.TagColumn},
+			Table:   tbltag.InventoryTagTable,
+			Columns: []string{tbltag.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),
@@ -549,12 +549,12 @@ func (ttuo *TblTagUpdateOne) sqlSave(ctx context.Context) (_node *TblTag, err er
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ttuo.mutation.RemovedTagIDs(); len(nodes) > 0 && !ttuo.mutation.TagCleared() {
+	if nodes := ttuo.mutation.RemovedInventoryTagIDs(); len(nodes) > 0 && !ttuo.mutation.InventoryTagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tbltag.TagTable,
-			Columns: []string{tbltag.TagColumn},
+			Table:   tbltag.InventoryTagTable,
+			Columns: []string{tbltag.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),
@@ -565,12 +565,12 @@ func (ttuo *TblTagUpdateOne) sqlSave(ctx context.Context) (_node *TblTag, err er
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ttuo.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := ttuo.mutation.InventoryTagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tbltag.TagTable,
-			Columns: []string{tbltag.TagColumn},
+			Table:   tbltag.InventoryTagTable,
+			Columns: []string{tbltag.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),

@@ -21,14 +21,13 @@ import (
 // TblInventoryTagQuery is the builder for querying TblInventoryTag entities.
 type TblInventoryTagQuery struct {
 	config
-	ctx             *QueryContext
-	order           []tblinventorytag.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.TblInventoryTag
-	withTagID       *TblTagQuery
-	withInventoryID *TblInventoryQuery
-	withFKs         bool
-	modifiers       []func(*sql.Selector)
+	ctx           *QueryContext
+	order         []tblinventorytag.OrderOption
+	inters        []Interceptor
+	predicates    []predicate.TblInventoryTag
+	withInventory *TblInventoryQuery
+	withTag       *TblTagQuery
+	modifiers     []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -65,30 +64,8 @@ func (titq *TblInventoryTagQuery) Order(o ...tblinventorytag.OrderOption) *TblIn
 	return titq
 }
 
-// QueryTagID chains the current query on the "tag_Id" edge.
-func (titq *TblInventoryTagQuery) QueryTagID() *TblTagQuery {
-	query := (&TblTagClient{config: titq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := titq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := titq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(tblinventorytag.Table, tblinventorytag.FieldID, selector),
-			sqlgraph.To(tbltag.Table, tbltag.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, tblinventorytag.TagIDTable, tblinventorytag.TagIDColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(titq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryInventoryID chains the current query on the "inventory_Id" edge.
-func (titq *TblInventoryTagQuery) QueryInventoryID() *TblInventoryQuery {
+// QueryInventory chains the current query on the "inventory" edge.
+func (titq *TblInventoryTagQuery) QueryInventory() *TblInventoryQuery {
 	query := (&TblInventoryClient{config: titq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := titq.prepareQuery(ctx); err != nil {
@@ -101,7 +78,29 @@ func (titq *TblInventoryTagQuery) QueryInventoryID() *TblInventoryQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tblinventorytag.Table, tblinventorytag.FieldID, selector),
 			sqlgraph.To(tblinventory.Table, tblinventory.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, tblinventorytag.InventoryIDTable, tblinventorytag.InventoryIDColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, tblinventorytag.InventoryTable, tblinventorytag.InventoryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(titq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTag chains the current query on the "tag" edge.
+func (titq *TblInventoryTagQuery) QueryTag() *TblTagQuery {
+	query := (&TblTagClient{config: titq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := titq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := titq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tblinventorytag.Table, tblinventorytag.FieldID, selector),
+			sqlgraph.To(tbltag.Table, tbltag.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, tblinventorytag.TagTable, tblinventorytag.TagColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(titq.driver.Dialect(), step)
 		return fromU, nil
@@ -296,38 +295,38 @@ func (titq *TblInventoryTagQuery) Clone() *TblInventoryTagQuery {
 		return nil
 	}
 	return &TblInventoryTagQuery{
-		config:          titq.config,
-		ctx:             titq.ctx.Clone(),
-		order:           append([]tblinventorytag.OrderOption{}, titq.order...),
-		inters:          append([]Interceptor{}, titq.inters...),
-		predicates:      append([]predicate.TblInventoryTag{}, titq.predicates...),
-		withTagID:       titq.withTagID.Clone(),
-		withInventoryID: titq.withInventoryID.Clone(),
+		config:        titq.config,
+		ctx:           titq.ctx.Clone(),
+		order:         append([]tblinventorytag.OrderOption{}, titq.order...),
+		inters:        append([]Interceptor{}, titq.inters...),
+		predicates:    append([]predicate.TblInventoryTag{}, titq.predicates...),
+		withInventory: titq.withInventory.Clone(),
+		withTag:       titq.withTag.Clone(),
 		// clone intermediate query.
 		sql:  titq.sql.Clone(),
 		path: titq.path,
 	}
 }
 
-// WithTagID tells the query-builder to eager-load the nodes that are connected to
-// the "tag_Id" edge. The optional arguments are used to configure the query builder of the edge.
-func (titq *TblInventoryTagQuery) WithTagID(opts ...func(*TblTagQuery)) *TblInventoryTagQuery {
-	query := (&TblTagClient{config: titq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	titq.withTagID = query
-	return titq
-}
-
-// WithInventoryID tells the query-builder to eager-load the nodes that are connected to
-// the "inventory_Id" edge. The optional arguments are used to configure the query builder of the edge.
-func (titq *TblInventoryTagQuery) WithInventoryID(opts ...func(*TblInventoryQuery)) *TblInventoryTagQuery {
+// WithInventory tells the query-builder to eager-load the nodes that are connected to
+// the "inventory" edge. The optional arguments are used to configure the query builder of the edge.
+func (titq *TblInventoryTagQuery) WithInventory(opts ...func(*TblInventoryQuery)) *TblInventoryTagQuery {
 	query := (&TblInventoryClient{config: titq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	titq.withInventoryID = query
+	titq.withInventory = query
+	return titq
+}
+
+// WithTag tells the query-builder to eager-load the nodes that are connected to
+// the "tag" edge. The optional arguments are used to configure the query builder of the edge.
+func (titq *TblInventoryTagQuery) WithTag(opts ...func(*TblTagQuery)) *TblInventoryTagQuery {
+	query := (&TblTagClient{config: titq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	titq.withTag = query
 	return titq
 }
 
@@ -408,19 +407,12 @@ func (titq *TblInventoryTagQuery) prepareQuery(ctx context.Context) error {
 func (titq *TblInventoryTagQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TblInventoryTag, error) {
 	var (
 		nodes       = []*TblInventoryTag{}
-		withFKs     = titq.withFKs
 		_spec       = titq.querySpec()
 		loadedTypes = [2]bool{
-			titq.withTagID != nil,
-			titq.withInventoryID != nil,
+			titq.withInventory != nil,
+			titq.withTag != nil,
 		}
 	)
-	if titq.withTagID != nil || titq.withInventoryID != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, tblinventorytag.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TblInventoryTag).scanValues(nil, columns)
 	}
@@ -442,61 +434,26 @@ func (titq *TblInventoryTagQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := titq.withTagID; query != nil {
-		if err := titq.loadTagID(ctx, query, nodes, nil,
-			func(n *TblInventoryTag, e *TblTag) { n.Edges.TagID = e }); err != nil {
+	if query := titq.withInventory; query != nil {
+		if err := titq.loadInventory(ctx, query, nodes, nil,
+			func(n *TblInventoryTag, e *TblInventory) { n.Edges.Inventory = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := titq.withInventoryID; query != nil {
-		if err := titq.loadInventoryID(ctx, query, nodes, nil,
-			func(n *TblInventoryTag, e *TblInventory) { n.Edges.InventoryID = e }); err != nil {
+	if query := titq.withTag; query != nil {
+		if err := titq.loadTag(ctx, query, nodes, nil,
+			func(n *TblInventoryTag, e *TblTag) { n.Edges.Tag = e }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (titq *TblInventoryTagQuery) loadTagID(ctx context.Context, query *TblTagQuery, nodes []*TblInventoryTag, init func(*TblInventoryTag), assign func(*TblInventoryTag, *TblTag)) error {
+func (titq *TblInventoryTagQuery) loadInventory(ctx context.Context, query *TblInventoryQuery, nodes []*TblInventoryTag, init func(*TblInventoryTag), assign func(*TblInventoryTag, *TblInventory)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*TblInventoryTag)
 	for i := range nodes {
-		if nodes[i].tbl_tag_tag == nil {
-			continue
-		}
-		fk := *nodes[i].tbl_tag_tag
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(tbltag.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "tbl_tag_tag" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
-func (titq *TblInventoryTagQuery) loadInventoryID(ctx context.Context, query *TblInventoryQuery, nodes []*TblInventoryTag, init func(*TblInventoryTag), assign func(*TblInventoryTag, *TblInventory)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*TblInventoryTag)
-	for i := range nodes {
-		if nodes[i].tbl_inventory_inventory == nil {
-			continue
-		}
-		fk := *nodes[i].tbl_inventory_inventory
+		fk := nodes[i].InventoryId
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -513,7 +470,36 @@ func (titq *TblInventoryTagQuery) loadInventoryID(ctx context.Context, query *Tb
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "tbl_inventory_inventory" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "InventoryId" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (titq *TblInventoryTagQuery) loadTag(ctx context.Context, query *TblTagQuery, nodes []*TblInventoryTag, init func(*TblInventoryTag), assign func(*TblInventoryTag, *TblTag)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TblInventoryTag)
+	for i := range nodes {
+		fk := nodes[i].TagId
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(tbltag.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "TagId" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -549,6 +535,12 @@ func (titq *TblInventoryTagQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != tblinventorytag.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if titq.withInventory != nil {
+			_spec.Node.AddColumnOnce(tblinventorytag.FieldInventoryId)
+		}
+		if titq.withTag != nil {
+			_spec.Node.AddColumnOnce(tblinventorytag.FieldTagId)
 		}
 	}
 	if ps := titq.predicates; len(ps) > 0 {

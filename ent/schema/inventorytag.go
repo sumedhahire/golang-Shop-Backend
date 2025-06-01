@@ -26,21 +26,21 @@ func (TblInventoryTag) Fields() []ent.Field {
 		field.String("id").StorageKey("Id_uuid"),
 		field.String("InventoryId").StorageKey("InventoryId").Optional(),
 		field.String("TagId").StorageKey("TagId").Optional(),
-
 		field.Time("Created_at").StorageKey("Created_at").Default(time.Now),
 		field.Time("Updated_at").StorageKey("Updated_at"),
-		field.Time("Deleted_at").StorageKey("Deleted_at").Nillable(),
+		field.Time("Deleted_at").StorageKey("Deleted_at").Optional().Nillable(),
 	}
 }
 
 func (TblInventoryTag) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("tag_Id", TblTag.Type).
-			Ref("tag").
-			Unique(),
-
-		edge.From("inventory_Id", TblInventory.Type).
-			Ref("inventory").
-			Unique(),
+		edge.From("inventory", TblInventory.Type).
+			Unique().
+			Field("InventoryId").
+			Ref("inventoryTag"),
+		edge.From("tag", TblTag.Type).
+			Unique().
+			Field("TagId").
+			Ref("inventoryTag"),
 	}
 }

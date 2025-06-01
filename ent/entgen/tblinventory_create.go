@@ -104,19 +104,19 @@ func (tic *TblInventoryCreate) SetID(s string) *TblInventoryCreate {
 	return tic
 }
 
-// AddInventoryIDs adds the "inventory" edge to the TblInventoryTag entity by IDs.
-func (tic *TblInventoryCreate) AddInventoryIDs(ids ...string) *TblInventoryCreate {
-	tic.mutation.AddInventoryIDs(ids...)
+// AddInventoryTagIDs adds the "inventoryTag" edge to the TblInventoryTag entity by IDs.
+func (tic *TblInventoryCreate) AddInventoryTagIDs(ids ...string) *TblInventoryCreate {
+	tic.mutation.AddInventoryTagIDs(ids...)
 	return tic
 }
 
-// AddInventory adds the "inventory" edges to the TblInventoryTag entity.
-func (tic *TblInventoryCreate) AddInventory(t ...*TblInventoryTag) *TblInventoryCreate {
+// AddInventoryTag adds the "inventoryTag" edges to the TblInventoryTag entity.
+func (tic *TblInventoryCreate) AddInventoryTag(t ...*TblInventoryTag) *TblInventoryCreate {
 	ids := make([]string, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
-	return tic.AddInventoryIDs(ids...)
+	return tic.AddInventoryTagIDs(ids...)
 }
 
 // AddInventoryCartIDs adds the "InventoryCart" edge to the TblCart entity by IDs.
@@ -295,12 +295,12 @@ func (tic *TblInventoryCreate) createSpec() (*TblInventory, *sqlgraph.CreateSpec
 		_spec.SetField(tblinventory.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = &value
 	}
-	if nodes := tic.mutation.InventoryIDs(); len(nodes) > 0 {
+	if nodes := tic.mutation.InventoryTagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tblinventory.InventoryTable,
-			Columns: []string{tblinventory.InventoryColumn},
+			Table:   tblinventory.InventoryTagTable,
+			Columns: []string{tblinventory.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),

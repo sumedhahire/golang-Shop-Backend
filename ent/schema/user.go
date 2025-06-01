@@ -50,8 +50,8 @@ func (TblUser) Fields() []ent.Field {
 			MaxLen(255).
 			NotEmpty(),
 
-		field.Int("is_active").
-			Default(1),
+		field.Bool("is_active").
+			Default(true),
 
 		field.Int("zip_code").
 			Optional().

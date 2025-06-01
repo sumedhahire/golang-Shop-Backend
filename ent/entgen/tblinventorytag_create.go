@@ -79,48 +79,56 @@ func (titc *TblInventoryTagCreate) SetDeletedAt(t time.Time) *TblInventoryTagCre
 	return titc
 }
 
+// SetNillableDeletedAt sets the "Deleted_at" field if the given value is not nil.
+func (titc *TblInventoryTagCreate) SetNillableDeletedAt(t *time.Time) *TblInventoryTagCreate {
+	if t != nil {
+		titc.SetDeletedAt(*t)
+	}
+	return titc
+}
+
 // SetID sets the "id" field.
 func (titc *TblInventoryTagCreate) SetID(s string) *TblInventoryTagCreate {
 	titc.mutation.SetID(s)
 	return titc
 }
 
-// SetTagIDID sets the "tag_Id" edge to the TblTag entity by ID.
-func (titc *TblInventoryTagCreate) SetTagIDID(id string) *TblInventoryTagCreate {
-	titc.mutation.SetTagIDID(id)
+// SetInventoryID sets the "inventory" edge to the TblInventory entity by ID.
+func (titc *TblInventoryTagCreate) SetInventoryID(id string) *TblInventoryTagCreate {
+	titc.mutation.SetInventoryID(id)
 	return titc
 }
 
-// SetNillableTagIDID sets the "tag_Id" edge to the TblTag entity by ID if the given value is not nil.
-func (titc *TblInventoryTagCreate) SetNillableTagIDID(id *string) *TblInventoryTagCreate {
+// SetNillableInventoryID sets the "inventory" edge to the TblInventory entity by ID if the given value is not nil.
+func (titc *TblInventoryTagCreate) SetNillableInventoryID(id *string) *TblInventoryTagCreate {
 	if id != nil {
-		titc = titc.SetTagIDID(*id)
+		titc = titc.SetInventoryID(*id)
 	}
 	return titc
 }
 
-// SetTagID sets the "tag_Id" edge to the TblTag entity.
-func (titc *TblInventoryTagCreate) SetTagID(t *TblTag) *TblInventoryTagCreate {
-	return titc.SetTagIDID(t.ID)
+// SetInventory sets the "inventory" edge to the TblInventory entity.
+func (titc *TblInventoryTagCreate) SetInventory(t *TblInventory) *TblInventoryTagCreate {
+	return titc.SetInventoryID(t.ID)
 }
 
-// SetInventoryIDID sets the "inventory_Id" edge to the TblInventory entity by ID.
-func (titc *TblInventoryTagCreate) SetInventoryIDID(id string) *TblInventoryTagCreate {
-	titc.mutation.SetInventoryIDID(id)
+// SetTagID sets the "tag" edge to the TblTag entity by ID.
+func (titc *TblInventoryTagCreate) SetTagID(id string) *TblInventoryTagCreate {
+	titc.mutation.SetTagID(id)
 	return titc
 }
 
-// SetNillableInventoryIDID sets the "inventory_Id" edge to the TblInventory entity by ID if the given value is not nil.
-func (titc *TblInventoryTagCreate) SetNillableInventoryIDID(id *string) *TblInventoryTagCreate {
+// SetNillableTagID sets the "tag" edge to the TblTag entity by ID if the given value is not nil.
+func (titc *TblInventoryTagCreate) SetNillableTagID(id *string) *TblInventoryTagCreate {
 	if id != nil {
-		titc = titc.SetInventoryIDID(*id)
+		titc = titc.SetTagID(*id)
 	}
 	return titc
 }
 
-// SetInventoryID sets the "inventory_Id" edge to the TblInventory entity.
-func (titc *TblInventoryTagCreate) SetInventoryID(t *TblInventory) *TblInventoryTagCreate {
-	return titc.SetInventoryIDID(t.ID)
+// SetTag sets the "tag" edge to the TblTag entity.
+func (titc *TblInventoryTagCreate) SetTag(t *TblTag) *TblInventoryTagCreate {
+	return titc.SetTagID(t.ID)
 }
 
 // Mutation returns the TblInventoryTagMutation object of the builder.
@@ -172,9 +180,6 @@ func (titc *TblInventoryTagCreate) check() error {
 	if _, ok := titc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "Updated_at", err: errors.New(`entgen: missing required field "TblInventoryTag.Updated_at"`)}
 	}
-	if _, ok := titc.mutation.DeletedAt(); !ok {
-		return &ValidationError{Name: "Deleted_at", err: errors.New(`entgen: missing required field "TblInventoryTag.Deleted_at"`)}
-	}
 	return nil
 }
 
@@ -211,14 +216,6 @@ func (titc *TblInventoryTagCreate) createSpec() (*TblInventoryTag, *sqlgraph.Cre
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := titc.mutation.InventoryId(); ok {
-		_spec.SetField(tblinventorytag.FieldInventoryId, field.TypeString, value)
-		_node.InventoryId = value
-	}
-	if value, ok := titc.mutation.TagId(); ok {
-		_spec.SetField(tblinventorytag.FieldTagId, field.TypeString, value)
-		_node.TagId = value
-	}
 	if value, ok := titc.mutation.CreatedAt(); ok {
 		_spec.SetField(tblinventorytag.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -231,29 +228,12 @@ func (titc *TblInventoryTagCreate) createSpec() (*TblInventoryTag, *sqlgraph.Cre
 		_spec.SetField(tblinventorytag.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = &value
 	}
-	if nodes := titc.mutation.TagIDIDs(); len(nodes) > 0 {
+	if nodes := titc.mutation.InventoryIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   tblinventorytag.TagIDTable,
-			Columns: []string{tblinventorytag.TagIDColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tbltag.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.tbl_tag_tag = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := titc.mutation.InventoryIDIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   tblinventorytag.InventoryIDTable,
-			Columns: []string{tblinventorytag.InventoryIDColumn},
+			Table:   tblinventorytag.InventoryTable,
+			Columns: []string{tblinventorytag.InventoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventory.FieldID, field.TypeString),
@@ -262,7 +242,24 @@ func (titc *TblInventoryTagCreate) createSpec() (*TblInventoryTag, *sqlgraph.Cre
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.tbl_inventory_inventory = &nodes[0]
+		_node.InventoryId = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := titc.mutation.TagIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   tblinventorytag.TagTable,
+			Columns: []string{tblinventorytag.TagColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tbltag.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TagId = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
@@ -386,6 +383,12 @@ func (u *TblInventoryTagUpsert) SetDeletedAt(v time.Time) *TblInventoryTagUpsert
 // UpdateDeletedAt sets the "Deleted_at" field to the value that was provided on create.
 func (u *TblInventoryTagUpsert) UpdateDeletedAt() *TblInventoryTagUpsert {
 	u.SetExcluded(tblinventorytag.FieldDeletedAt)
+	return u
+}
+
+// ClearDeletedAt clears the value of the "Deleted_at" field.
+func (u *TblInventoryTagUpsert) ClearDeletedAt() *TblInventoryTagUpsert {
+	u.SetNull(tblinventorytag.FieldDeletedAt)
 	return u
 }
 
@@ -518,6 +521,13 @@ func (u *TblInventoryTagUpsertOne) SetDeletedAt(v time.Time) *TblInventoryTagUps
 func (u *TblInventoryTagUpsertOne) UpdateDeletedAt() *TblInventoryTagUpsertOne {
 	return u.Update(func(s *TblInventoryTagUpsert) {
 		s.UpdateDeletedAt()
+	})
+}
+
+// ClearDeletedAt clears the value of the "Deleted_at" field.
+func (u *TblInventoryTagUpsertOne) ClearDeletedAt() *TblInventoryTagUpsertOne {
+	return u.Update(func(s *TblInventoryTagUpsert) {
+		s.ClearDeletedAt()
 	})
 }
 
@@ -817,6 +827,13 @@ func (u *TblInventoryTagUpsertBulk) SetDeletedAt(v time.Time) *TblInventoryTagUp
 func (u *TblInventoryTagUpsertBulk) UpdateDeletedAt() *TblInventoryTagUpsertBulk {
 	return u.Update(func(s *TblInventoryTagUpsert) {
 		s.UpdateDeletedAt()
+	})
+}
+
+// ClearDeletedAt clears the value of the "Deleted_at" field.
+func (u *TblInventoryTagUpsertBulk) ClearDeletedAt() *TblInventoryTagUpsertBulk {
+	return u.Update(func(s *TblInventoryTagUpsert) {
+		s.ClearDeletedAt()
 	})
 }
 

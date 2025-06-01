@@ -365,21 +365,21 @@ func DeletedAtNotNil() predicate.TblTag {
 	return predicate.TblTag(sql.FieldNotNull(FieldDeletedAt))
 }
 
-// HasTag applies the HasEdge predicate on the "tag" edge.
-func HasTag() predicate.TblTag {
+// HasInventoryTag applies the HasEdge predicate on the "inventoryTag" edge.
+func HasInventoryTag() predicate.TblTag {
 	return predicate.TblTag(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, TagTable, TagColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, InventoryTagTable, InventoryTagColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasTagWith applies the HasEdge predicate on the "tag" edge with a given conditions (other predicates).
-func HasTagWith(preds ...predicate.TblInventoryTag) predicate.TblTag {
+// HasInventoryTagWith applies the HasEdge predicate on the "inventoryTag" edge with a given conditions (other predicates).
+func HasInventoryTagWith(preds ...predicate.TblInventoryTag) predicate.TblTag {
 	return predicate.TblTag(func(s *sql.Selector) {
-		step := newTagStep()
+		step := newInventoryTagStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

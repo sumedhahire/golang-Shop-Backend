@@ -26,17 +26,17 @@ const (
 	FieldUpdatedAt = "Updated_at"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "Deleted_at"
-	// EdgeTag holds the string denoting the tag edge name in mutations.
-	EdgeTag = "tag"
+	// EdgeInventoryTag holds the string denoting the inventorytag edge name in mutations.
+	EdgeInventoryTag = "inventoryTag"
 	// Table holds the table name of the tbltag in the database.
 	Table = "Tbl_Tag"
-	// TagTable is the table that holds the tag relation/edge.
-	TagTable = "Tbl_Inventory_Tag"
-	// TagInverseTable is the table name for the TblInventoryTag entity.
+	// InventoryTagTable is the table that holds the inventoryTag relation/edge.
+	InventoryTagTable = "Tbl_Inventory_Tag"
+	// InventoryTagInverseTable is the table name for the TblInventoryTag entity.
 	// It exists in this package in order to avoid circular dependency with the "tblinventorytag" package.
-	TagInverseTable = "Tbl_Inventory_Tag"
-	// TagColumn is the table column denoting the tag relation/edge.
-	TagColumn = "tbl_tag_tag"
+	InventoryTagInverseTable = "Tbl_Inventory_Tag"
+	// InventoryTagColumn is the table column denoting the inventoryTag relation/edge.
+	InventoryTagColumn = "TagId"
 )
 
 // Columns holds all SQL columns for tbltag fields.
@@ -109,23 +109,23 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedAt, opts...).ToFunc()
 }
 
-// ByTagCount orders the results by tag count.
-func ByTagCount(opts ...sql.OrderTermOption) OrderOption {
+// ByInventoryTagCount orders the results by inventoryTag count.
+func ByInventoryTagCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTagStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newInventoryTagStep(), opts...)
 	}
 }
 
-// ByTag orders the results by tag terms.
-func ByTag(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByInventoryTag orders the results by inventoryTag terms.
+func ByInventoryTag(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTagStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newInventoryTagStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newTagStep() *sqlgraph.Step {
+func newInventoryTagStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TagInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, TagTable, TagColumn),
+		sqlgraph.To(InventoryTagInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, InventoryTagTable, InventoryTagColumn),
 	)
 }

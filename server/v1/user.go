@@ -10,14 +10,20 @@ import (
 func InitUser(v1 *echo.Group, client *config.AppConfig) {
 
 	userRoute := v1.Group("/user")
-	userRouteSecure := userRoute.Group("")
-
-	userRouteSecure.Use(customMiddleware.OauthValidationUser())
 
 	handler := user.NewSHandler(client)
 
+	userRouteSecure := userRoute.Group("")
+	userRouteSecure.Use(customMiddleware.OauthValidationUser())
+
+	//USER
 	userRouteSecure.GET("", handler.Get)
-	//userRouteSecure.GET("", handler.List)
+
+	//ADMIN
+	userRouteAdmin := userRoute.Group("/admin")
+	userRouteAdmin.Use(customMiddleware.OauthValidationAdmin())
+	userRouteAdmin.GET("", handler.List)
+
 	//userRouteSecure.POST("", handler.Add)
 	//userRouteSecure.POST("/buy", handler.Buy)
 	//userRouteSecure.POST("/verify", handler.Verify)

@@ -22,5 +22,5 @@ func InitService(e *echo.Echo) {
 	v1Obj.InitInventory(v1, appConfig)
 	v1Obj.InitCart(v1, appConfig)
 	v1Obj.InitUser(v1, appConfig)
-
+	v1Obj.InitTag(v1, appConfig)
 }

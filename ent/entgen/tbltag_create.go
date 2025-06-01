@@ -90,19 +90,19 @@ func (ttc *TblTagCreate) SetID(s string) *TblTagCreate {
 	return ttc
 }
 
-// AddTagIDs adds the "tag" edge to the TblInventoryTag entity by IDs.
-func (ttc *TblTagCreate) AddTagIDs(ids ...string) *TblTagCreate {
-	ttc.mutation.AddTagIDs(ids...)
+// AddInventoryTagIDs adds the "inventoryTag" edge to the TblInventoryTag entity by IDs.
+func (ttc *TblTagCreate) AddInventoryTagIDs(ids ...string) *TblTagCreate {
+	ttc.mutation.AddInventoryTagIDs(ids...)
 	return ttc
 }
 
-// AddTag adds the "tag" edges to the TblInventoryTag entity.
-func (ttc *TblTagCreate) AddTag(t ...*TblInventoryTag) *TblTagCreate {
+// AddInventoryTag adds the "inventoryTag" edges to the TblInventoryTag entity.
+func (ttc *TblTagCreate) AddInventoryTag(t ...*TblInventoryTag) *TblTagCreate {
 	ids := make([]string, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
-	return ttc.AddTagIDs(ids...)
+	return ttc.AddInventoryTagIDs(ids...)
 }
 
 // Mutation returns the TblTagMutation object of the builder.
@@ -237,12 +237,12 @@ func (ttc *TblTagCreate) createSpec() (*TblTag, *sqlgraph.CreateSpec) {
 		_spec.SetField(tbltag.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = &value
 	}
-	if nodes := ttc.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := ttc.mutation.InventoryTagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tbltag.TagTable,
-			Columns: []string{tbltag.TagColumn},
+			Table:   tbltag.InventoryTagTable,
+			Columns: []string{tbltag.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),

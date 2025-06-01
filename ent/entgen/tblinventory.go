@@ -41,8 +41,8 @@ type TblInventory struct {
 
 // TblInventoryEdges holds the relations/edges for other nodes in the graph.
 type TblInventoryEdges struct {
-	// Inventory holds the value of the inventory edge.
-	Inventory []*TblInventoryTag `json:"inventory,omitempty"`
+	// InventoryTag holds the value of the inventoryTag edge.
+	InventoryTag []*TblInventoryTag `json:"inventoryTag,omitempty"`
 	// InventoryCart holds the value of the InventoryCart edge.
 	InventoryCart []*TblCart `json:"InventoryCart,omitempty"`
 	// InventoryPayment holds the value of the InventoryPayment edge.
@@ -52,13 +52,13 @@ type TblInventoryEdges struct {
 	loadedTypes [3]bool
 }
 
-// InventoryOrErr returns the Inventory value or an error if the edge
+// InventoryTagOrErr returns the InventoryTag value or an error if the edge
 // was not loaded in eager-loading.
-func (e TblInventoryEdges) InventoryOrErr() ([]*TblInventoryTag, error) {
+func (e TblInventoryEdges) InventoryTagOrErr() ([]*TblInventoryTag, error) {
 	if e.loadedTypes[0] {
-		return e.Inventory, nil
+		return e.InventoryTag, nil
 	}
-	return nil, &NotLoadedError{edge: "inventory"}
+	return nil, &NotLoadedError{edge: "inventoryTag"}
 }
 
 // InventoryCartOrErr returns the InventoryCart value or an error if the edge
@@ -175,9 +175,9 @@ func (ti *TblInventory) Value(name string) (ent.Value, error) {
 	return ti.selectValues.Get(name)
 }
 
-// QueryInventory queries the "inventory" edge of the TblInventory entity.
-func (ti *TblInventory) QueryInventory() *TblInventoryTagQuery {
-	return NewTblInventoryClient(ti.config).QueryInventory(ti)
+// QueryInventoryTag queries the "inventoryTag" edge of the TblInventory entity.
+func (ti *TblInventory) QueryInventoryTag() *TblInventoryTagQuery {
+	return NewTblInventoryClient(ti.config).QueryInventoryTag(ti)
 }
 
 // QueryInventoryCart queries the "InventoryCart" edge of the TblInventory entity.

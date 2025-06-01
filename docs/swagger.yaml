@@ -1,0 +1,637 @@
+basePath: /api/v1
+definitions:
+  cart.RQCart:
+    properties:
+      productId:
+        type: string
+      status:
+        type: string
+    required:
+    - productId
+    type: object
+  cart.RQPayment:
+    properties:
+      razorpay_order_id:
+        type: string
+      razorpay_payment_id:
+        type: string
+    type: object
+  cart.RSCart:
+    properties:
+      id:
+        type: string
+      imageUrl:
+        type: string
+      productId:
+        $ref: '#/definitions/inventory.RSInventory'
+      status:
+        type: string
+      userId:
+        type: string
+    type: object
+  errorhandler.BaseErr:
+    properties:
+      code:
+        type: integer
+      codeText:
+        type: string
+      message:
+        type: string
+      validationErrors:
+        items:
+          $ref: '#/definitions/errorhandler.ValidationErr'
+        type: array
+    type: object
+  errorhandler.ValidationErr:
+    properties:
+      field:
+        type: string
+      reason:
+        type: string
+    type: object
+  inventory.RQInventory:
+    properties:
+      description:
+        type: string
+      isActive:
+        type: boolean
+      name:
+        example: test
+        maxLength: 32
+        minLength: 3
+        type: string
+      price:
+        example: 10
+        type: number
+      tag:
+        items:
+          type: string
+        type: array
+    required:
+    - description
+    - isActive
+    - name
+    - price
+    type: object
+  inventory.RSInventory:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      imageUrl:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  response.BaseRS:
+    properties:
+      apiVersion:
+        type: string
+      data: {}
+      error: {}
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+    url: http://www.example.com/support
+  description: Your API description
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Mitti & More
+  version: "1.0"
+paths:
+  /api/v1/cart:
+    get:
+      description: Returns a carts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/cart.RSCart'
+                  type: array
+                error: {}
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: List cart
+      tags:
+      - cart
+    post:
+      description: Returns a user based on the authenticated user ID from the context
+      parameters:
+      - description: cart data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/cart.RQCart'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+      security:
+      - BearerAuth: []
+      summary: Add cart
+      tags:
+      - cart
+  /api/v1/cart/{id}:
+    get:
+      description: Returns a cart based on the provided ID from the path
+      parameters:
+      - description: Cart ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data:
+                  $ref: '#/definitions/cart.RSCart'
+                error: {}
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Get cart by ID
+      tags:
+      - cart
+  /api/v1/cart/buy:
+    post:
+      consumes:
+      - application/json
+      description: Submits the authenticated user's cart for checkout
+      parameters:
+      - description: Cart purchase request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/cart.RQCart'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data:
+                  $ref: '#/definitions/cart.RSCart'
+                error: {}
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Submit cart for purchase
+      tags:
+      - cart
+  /api/v1/cart/buy-count:
+    get:
+      description: Returns the number of purchases made by the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data:
+                  type: integer
+                error: {}
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Get user's purchase count
+      tags:
+      - cart
+  /api/v1/cart/verify:
+    post:
+      consumes:
+      - application/json
+      description: Verifies payment for a submitted cart
+      parameters:
+      - description: Payment verification request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/cart.RQPayment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                error: {}
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Verify cart payment
+      tags:
+      - cart
+  /api/v1/inventory:
+    get:
+      description: Returns a list of inventory items with optional filters
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/inventory.RSInventory'
+                  type: array
+                error: {}
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+      summary: List inventory items
+      tags:
+      - inventory
+  /api/v1/inventory/{id}:
+    get:
+      description: Returns an inventory item by ID
+      parameters:
+      - description: Inventory ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data:
+                  $ref: '#/definitions/inventory.RSInventory'
+                error: {}
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+      summary: Get inventory item
+      tags:
+      - inventory
+  /api/v1/inventory/admin:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Adds a new inventory item with image and metadata
+      parameters:
+      - description: Product image
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Product name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Product price
+        in: formData
+        name: price
+        required: true
+        type: number
+      - description: Product description
+        in: formData
+        name: description
+        type: string
+      - description: Product active status
+        in: formData
+        name: isActive
+        required: true
+        type: boolean
+      - description: JSON array of tag IDs
+        in: formData
+        name: tag
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data:
+                  $ref: '#/definitions/inventory.RSInventory'
+                error: {}
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Add inventory item
+      tags:
+      - inventory
+  /api/v1/inventory/admin/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing inventory item by ID
+      parameters:
+      - description: Inventory ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated inventory data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/inventory.RQInventory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data:
+                  $ref: '#/definitions/inventory.RSInventory'
+                error: {}
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseRS'
+            - properties:
+                data: {}
+                error:
+                  $ref: '#/definitions/errorhandler.BaseErr'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Update inventory item
+      tags:
+      - inventory
+  /api/v1/tag:
+    get:
+      description: Returns a user based on the authenticated user ID from the context
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+      summary: List tags
+      tags:
+      - user
+  /api/v1/user:
+    get:
+      description: Returns a user based on the authenticated user ID from the context
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+      summary: Get user by ID
+      tags:
+      - user
+  /api/v1/user/admin:
+    get:
+      description: Returns a user based on the authenticated user ID from the context
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.BaseRS'
+      summary: List user
+      tags:
+      - user
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

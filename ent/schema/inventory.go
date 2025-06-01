@@ -40,7 +40,7 @@ func (TblInventory) Fields() []ent.Field {
 
 func (TblInventory) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("inventory", TblInventoryTag.Type),
+		edge.To("inventoryTag", TblInventoryTag.Type),
 		edge.To("InventoryCart", TblCart.Type),
 		edge.To("InventoryPayment", TblPayment.Type),
 	}

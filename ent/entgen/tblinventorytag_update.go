@@ -112,42 +112,48 @@ func (titu *TblInventoryTagUpdate) SetNillableDeletedAt(t *time.Time) *TblInvent
 	return titu
 }
 
-// SetTagIDID sets the "tag_Id" edge to the TblTag entity by ID.
-func (titu *TblInventoryTagUpdate) SetTagIDID(id string) *TblInventoryTagUpdate {
-	titu.mutation.SetTagIDID(id)
+// ClearDeletedAt clears the value of the "Deleted_at" field.
+func (titu *TblInventoryTagUpdate) ClearDeletedAt() *TblInventoryTagUpdate {
+	titu.mutation.ClearDeletedAt()
 	return titu
 }
 
-// SetNillableTagIDID sets the "tag_Id" edge to the TblTag entity by ID if the given value is not nil.
-func (titu *TblInventoryTagUpdate) SetNillableTagIDID(id *string) *TblInventoryTagUpdate {
+// SetInventoryID sets the "inventory" edge to the TblInventory entity by ID.
+func (titu *TblInventoryTagUpdate) SetInventoryID(id string) *TblInventoryTagUpdate {
+	titu.mutation.SetInventoryID(id)
+	return titu
+}
+
+// SetNillableInventoryID sets the "inventory" edge to the TblInventory entity by ID if the given value is not nil.
+func (titu *TblInventoryTagUpdate) SetNillableInventoryID(id *string) *TblInventoryTagUpdate {
 	if id != nil {
-		titu = titu.SetTagIDID(*id)
+		titu = titu.SetInventoryID(*id)
 	}
 	return titu
 }
 
-// SetTagID sets the "tag_Id" edge to the TblTag entity.
-func (titu *TblInventoryTagUpdate) SetTagID(t *TblTag) *TblInventoryTagUpdate {
-	return titu.SetTagIDID(t.ID)
+// SetInventory sets the "inventory" edge to the TblInventory entity.
+func (titu *TblInventoryTagUpdate) SetInventory(t *TblInventory) *TblInventoryTagUpdate {
+	return titu.SetInventoryID(t.ID)
 }
 
-// SetInventoryIDID sets the "inventory_Id" edge to the TblInventory entity by ID.
-func (titu *TblInventoryTagUpdate) SetInventoryIDID(id string) *TblInventoryTagUpdate {
-	titu.mutation.SetInventoryIDID(id)
+// SetTagID sets the "tag" edge to the TblTag entity by ID.
+func (titu *TblInventoryTagUpdate) SetTagID(id string) *TblInventoryTagUpdate {
+	titu.mutation.SetTagID(id)
 	return titu
 }
 
-// SetNillableInventoryIDID sets the "inventory_Id" edge to the TblInventory entity by ID if the given value is not nil.
-func (titu *TblInventoryTagUpdate) SetNillableInventoryIDID(id *string) *TblInventoryTagUpdate {
+// SetNillableTagID sets the "tag" edge to the TblTag entity by ID if the given value is not nil.
+func (titu *TblInventoryTagUpdate) SetNillableTagID(id *string) *TblInventoryTagUpdate {
 	if id != nil {
-		titu = titu.SetInventoryIDID(*id)
+		titu = titu.SetTagID(*id)
 	}
 	return titu
 }
 
-// SetInventoryID sets the "inventory_Id" edge to the TblInventory entity.
-func (titu *TblInventoryTagUpdate) SetInventoryID(t *TblInventory) *TblInventoryTagUpdate {
-	return titu.SetInventoryIDID(t.ID)
+// SetTag sets the "tag" edge to the TblTag entity.
+func (titu *TblInventoryTagUpdate) SetTag(t *TblTag) *TblInventoryTagUpdate {
+	return titu.SetTagID(t.ID)
 }
 
 // Mutation returns the TblInventoryTagMutation object of the builder.
@@ -155,15 +161,15 @@ func (titu *TblInventoryTagUpdate) Mutation() *TblInventoryTagMutation {
 	return titu.mutation
 }
 
-// ClearTagID clears the "tag_Id" edge to the TblTag entity.
-func (titu *TblInventoryTagUpdate) ClearTagID() *TblInventoryTagUpdate {
-	titu.mutation.ClearTagID()
+// ClearInventory clears the "inventory" edge to the TblInventory entity.
+func (titu *TblInventoryTagUpdate) ClearInventory() *TblInventoryTagUpdate {
+	titu.mutation.ClearInventory()
 	return titu
 }
 
-// ClearInventoryID clears the "inventory_Id" edge to the TblInventory entity.
-func (titu *TblInventoryTagUpdate) ClearInventoryID() *TblInventoryTagUpdate {
-	titu.mutation.ClearInventoryID()
+// ClearTag clears the "tag" edge to the TblTag entity.
+func (titu *TblInventoryTagUpdate) ClearTag() *TblInventoryTagUpdate {
+	titu.mutation.ClearTag()
 	return titu
 }
 
@@ -203,18 +209,6 @@ func (titu *TblInventoryTagUpdate) sqlSave(ctx context.Context) (n int, err erro
 			}
 		}
 	}
-	if value, ok := titu.mutation.InventoryId(); ok {
-		_spec.SetField(tblinventorytag.FieldInventoryId, field.TypeString, value)
-	}
-	if titu.mutation.InventoryIdCleared() {
-		_spec.ClearField(tblinventorytag.FieldInventoryId, field.TypeString)
-	}
-	if value, ok := titu.mutation.TagId(); ok {
-		_spec.SetField(tblinventorytag.FieldTagId, field.TypeString, value)
-	}
-	if titu.mutation.TagIdCleared() {
-		_spec.ClearField(tblinventorytag.FieldTagId, field.TypeString)
-	}
 	if value, ok := titu.mutation.CreatedAt(); ok {
 		_spec.SetField(tblinventorytag.FieldCreatedAt, field.TypeTime, value)
 	}
@@ -224,28 +218,31 @@ func (titu *TblInventoryTagUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if value, ok := titu.mutation.DeletedAt(); ok {
 		_spec.SetField(tblinventorytag.FieldDeletedAt, field.TypeTime, value)
 	}
-	if titu.mutation.TagIDCleared() {
+	if titu.mutation.DeletedAtCleared() {
+		_spec.ClearField(tblinventorytag.FieldDeletedAt, field.TypeTime)
+	}
+	if titu.mutation.InventoryCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   tblinventorytag.TagIDTable,
-			Columns: []string{tblinventorytag.TagIDColumn},
+			Table:   tblinventorytag.InventoryTable,
+			Columns: []string{tblinventorytag.InventoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tbltag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tblinventory.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := titu.mutation.TagIDIDs(); len(nodes) > 0 {
+	if nodes := titu.mutation.InventoryIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   tblinventorytag.TagIDTable,
-			Columns: []string{tblinventorytag.TagIDColumn},
+			Table:   tblinventorytag.InventoryTable,
+			Columns: []string{tblinventorytag.InventoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tbltag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tblinventory.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -253,28 +250,28 @@ func (titu *TblInventoryTagUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if titu.mutation.InventoryIDCleared() {
+	if titu.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   tblinventorytag.InventoryIDTable,
-			Columns: []string{tblinventorytag.InventoryIDColumn},
+			Table:   tblinventorytag.TagTable,
+			Columns: []string{tblinventorytag.TagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tblinventory.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tbltag.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := titu.mutation.InventoryIDIDs(); len(nodes) > 0 {
+	if nodes := titu.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   tblinventorytag.InventoryIDTable,
-			Columns: []string{tblinventorytag.InventoryIDColumn},
+			Table:   tblinventorytag.TagTable,
+			Columns: []string{tblinventorytag.TagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tblinventory.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tbltag.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -384,42 +381,48 @@ func (tituo *TblInventoryTagUpdateOne) SetNillableDeletedAt(t *time.Time) *TblIn
 	return tituo
 }
 
-// SetTagIDID sets the "tag_Id" edge to the TblTag entity by ID.
-func (tituo *TblInventoryTagUpdateOne) SetTagIDID(id string) *TblInventoryTagUpdateOne {
-	tituo.mutation.SetTagIDID(id)
+// ClearDeletedAt clears the value of the "Deleted_at" field.
+func (tituo *TblInventoryTagUpdateOne) ClearDeletedAt() *TblInventoryTagUpdateOne {
+	tituo.mutation.ClearDeletedAt()
 	return tituo
 }
 
-// SetNillableTagIDID sets the "tag_Id" edge to the TblTag entity by ID if the given value is not nil.
-func (tituo *TblInventoryTagUpdateOne) SetNillableTagIDID(id *string) *TblInventoryTagUpdateOne {
+// SetInventoryID sets the "inventory" edge to the TblInventory entity by ID.
+func (tituo *TblInventoryTagUpdateOne) SetInventoryID(id string) *TblInventoryTagUpdateOne {
+	tituo.mutation.SetInventoryID(id)
+	return tituo
+}
+
+// SetNillableInventoryID sets the "inventory" edge to the TblInventory entity by ID if the given value is not nil.
+func (tituo *TblInventoryTagUpdateOne) SetNillableInventoryID(id *string) *TblInventoryTagUpdateOne {
 	if id != nil {
-		tituo = tituo.SetTagIDID(*id)
+		tituo = tituo.SetInventoryID(*id)
 	}
 	return tituo
 }
 
-// SetTagID sets the "tag_Id" edge to the TblTag entity.
-func (tituo *TblInventoryTagUpdateOne) SetTagID(t *TblTag) *TblInventoryTagUpdateOne {
-	return tituo.SetTagIDID(t.ID)
+// SetInventory sets the "inventory" edge to the TblInventory entity.
+func (tituo *TblInventoryTagUpdateOne) SetInventory(t *TblInventory) *TblInventoryTagUpdateOne {
+	return tituo.SetInventoryID(t.ID)
 }
 
-// SetInventoryIDID sets the "inventory_Id" edge to the TblInventory entity by ID.
-func (tituo *TblInventoryTagUpdateOne) SetInventoryIDID(id string) *TblInventoryTagUpdateOne {
-	tituo.mutation.SetInventoryIDID(id)
+// SetTagID sets the "tag" edge to the TblTag entity by ID.
+func (tituo *TblInventoryTagUpdateOne) SetTagID(id string) *TblInventoryTagUpdateOne {
+	tituo.mutation.SetTagID(id)
 	return tituo
 }
 
-// SetNillableInventoryIDID sets the "inventory_Id" edge to the TblInventory entity by ID if the given value is not nil.
-func (tituo *TblInventoryTagUpdateOne) SetNillableInventoryIDID(id *string) *TblInventoryTagUpdateOne {
+// SetNillableTagID sets the "tag" edge to the TblTag entity by ID if the given value is not nil.
+func (tituo *TblInventoryTagUpdateOne) SetNillableTagID(id *string) *TblInventoryTagUpdateOne {
 	if id != nil {
-		tituo = tituo.SetInventoryIDID(*id)
+		tituo = tituo.SetTagID(*id)
 	}
 	return tituo
 }
 
-// SetInventoryID sets the "inventory_Id" edge to the TblInventory entity.
-func (tituo *TblInventoryTagUpdateOne) SetInventoryID(t *TblInventory) *TblInventoryTagUpdateOne {
-	return tituo.SetInventoryIDID(t.ID)
+// SetTag sets the "tag" edge to the TblTag entity.
+func (tituo *TblInventoryTagUpdateOne) SetTag(t *TblTag) *TblInventoryTagUpdateOne {
+	return tituo.SetTagID(t.ID)
 }
 
 // Mutation returns the TblInventoryTagMutation object of the builder.
@@ -427,15 +430,15 @@ func (tituo *TblInventoryTagUpdateOne) Mutation() *TblInventoryTagMutation {
 	return tituo.mutation
 }
 
-// ClearTagID clears the "tag_Id" edge to the TblTag entity.
-func (tituo *TblInventoryTagUpdateOne) ClearTagID() *TblInventoryTagUpdateOne {
-	tituo.mutation.ClearTagID()
+// ClearInventory clears the "inventory" edge to the TblInventory entity.
+func (tituo *TblInventoryTagUpdateOne) ClearInventory() *TblInventoryTagUpdateOne {
+	tituo.mutation.ClearInventory()
 	return tituo
 }
 
-// ClearInventoryID clears the "inventory_Id" edge to the TblInventory entity.
-func (tituo *TblInventoryTagUpdateOne) ClearInventoryID() *TblInventoryTagUpdateOne {
-	tituo.mutation.ClearInventoryID()
+// ClearTag clears the "tag" edge to the TblTag entity.
+func (tituo *TblInventoryTagUpdateOne) ClearTag() *TblInventoryTagUpdateOne {
+	tituo.mutation.ClearTag()
 	return tituo
 }
 
@@ -505,18 +508,6 @@ func (tituo *TblInventoryTagUpdateOne) sqlSave(ctx context.Context) (_node *TblI
 			}
 		}
 	}
-	if value, ok := tituo.mutation.InventoryId(); ok {
-		_spec.SetField(tblinventorytag.FieldInventoryId, field.TypeString, value)
-	}
-	if tituo.mutation.InventoryIdCleared() {
-		_spec.ClearField(tblinventorytag.FieldInventoryId, field.TypeString)
-	}
-	if value, ok := tituo.mutation.TagId(); ok {
-		_spec.SetField(tblinventorytag.FieldTagId, field.TypeString, value)
-	}
-	if tituo.mutation.TagIdCleared() {
-		_spec.ClearField(tblinventorytag.FieldTagId, field.TypeString)
-	}
 	if value, ok := tituo.mutation.CreatedAt(); ok {
 		_spec.SetField(tblinventorytag.FieldCreatedAt, field.TypeTime, value)
 	}
@@ -526,28 +517,31 @@ func (tituo *TblInventoryTagUpdateOne) sqlSave(ctx context.Context) (_node *TblI
 	if value, ok := tituo.mutation.DeletedAt(); ok {
 		_spec.SetField(tblinventorytag.FieldDeletedAt, field.TypeTime, value)
 	}
-	if tituo.mutation.TagIDCleared() {
+	if tituo.mutation.DeletedAtCleared() {
+		_spec.ClearField(tblinventorytag.FieldDeletedAt, field.TypeTime)
+	}
+	if tituo.mutation.InventoryCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   tblinventorytag.TagIDTable,
-			Columns: []string{tblinventorytag.TagIDColumn},
+			Table:   tblinventorytag.InventoryTable,
+			Columns: []string{tblinventorytag.InventoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tbltag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tblinventory.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tituo.mutation.TagIDIDs(); len(nodes) > 0 {
+	if nodes := tituo.mutation.InventoryIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   tblinventorytag.TagIDTable,
-			Columns: []string{tblinventorytag.TagIDColumn},
+			Table:   tblinventorytag.InventoryTable,
+			Columns: []string{tblinventorytag.InventoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tbltag.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tblinventory.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -555,28 +549,28 @@ func (tituo *TblInventoryTagUpdateOne) sqlSave(ctx context.Context) (_node *TblI
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tituo.mutation.InventoryIDCleared() {
+	if tituo.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   tblinventorytag.InventoryIDTable,
-			Columns: []string{tblinventorytag.InventoryIDColumn},
+			Table:   tblinventorytag.TagTable,
+			Columns: []string{tblinventorytag.TagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tblinventory.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tbltag.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tituo.mutation.InventoryIDIDs(); len(nodes) > 0 {
+	if nodes := tituo.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   tblinventorytag.InventoryIDTable,
-			Columns: []string{tblinventorytag.InventoryIDColumn},
+			Table:   tblinventorytag.TagTable,
+			Columns: []string{tblinventorytag.TagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tblinventory.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(tbltag.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

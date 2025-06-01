@@ -156,19 +156,19 @@ func (tiu *TblInventoryUpdate) ClearDeletedAt() *TblInventoryUpdate {
 	return tiu
 }
 
-// AddInventoryIDs adds the "inventory" edge to the TblInventoryTag entity by IDs.
-func (tiu *TblInventoryUpdate) AddInventoryIDs(ids ...string) *TblInventoryUpdate {
-	tiu.mutation.AddInventoryIDs(ids...)
+// AddInventoryTagIDs adds the "inventoryTag" edge to the TblInventoryTag entity by IDs.
+func (tiu *TblInventoryUpdate) AddInventoryTagIDs(ids ...string) *TblInventoryUpdate {
+	tiu.mutation.AddInventoryTagIDs(ids...)
 	return tiu
 }
 
-// AddInventory adds the "inventory" edges to the TblInventoryTag entity.
-func (tiu *TblInventoryUpdate) AddInventory(t ...*TblInventoryTag) *TblInventoryUpdate {
+// AddInventoryTag adds the "inventoryTag" edges to the TblInventoryTag entity.
+func (tiu *TblInventoryUpdate) AddInventoryTag(t ...*TblInventoryTag) *TblInventoryUpdate {
 	ids := make([]string, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
-	return tiu.AddInventoryIDs(ids...)
+	return tiu.AddInventoryTagIDs(ids...)
 }
 
 // AddInventoryCartIDs adds the "InventoryCart" edge to the TblCart entity by IDs.
@@ -206,25 +206,25 @@ func (tiu *TblInventoryUpdate) Mutation() *TblInventoryMutation {
 	return tiu.mutation
 }
 
-// ClearInventory clears all "inventory" edges to the TblInventoryTag entity.
-func (tiu *TblInventoryUpdate) ClearInventory() *TblInventoryUpdate {
-	tiu.mutation.ClearInventory()
+// ClearInventoryTag clears all "inventoryTag" edges to the TblInventoryTag entity.
+func (tiu *TblInventoryUpdate) ClearInventoryTag() *TblInventoryUpdate {
+	tiu.mutation.ClearInventoryTag()
 	return tiu
 }
 
-// RemoveInventoryIDs removes the "inventory" edge to TblInventoryTag entities by IDs.
-func (tiu *TblInventoryUpdate) RemoveInventoryIDs(ids ...string) *TblInventoryUpdate {
-	tiu.mutation.RemoveInventoryIDs(ids...)
+// RemoveInventoryTagIDs removes the "inventoryTag" edge to TblInventoryTag entities by IDs.
+func (tiu *TblInventoryUpdate) RemoveInventoryTagIDs(ids ...string) *TblInventoryUpdate {
+	tiu.mutation.RemoveInventoryTagIDs(ids...)
 	return tiu
 }
 
-// RemoveInventory removes "inventory" edges to TblInventoryTag entities.
-func (tiu *TblInventoryUpdate) RemoveInventory(t ...*TblInventoryTag) *TblInventoryUpdate {
+// RemoveInventoryTag removes "inventoryTag" edges to TblInventoryTag entities.
+func (tiu *TblInventoryUpdate) RemoveInventoryTag(t ...*TblInventoryTag) *TblInventoryUpdate {
 	ids := make([]string, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
-	return tiu.RemoveInventoryIDs(ids...)
+	return tiu.RemoveInventoryTagIDs(ids...)
 }
 
 // ClearInventoryCart clears all "InventoryCart" edges to the TblCart entity.
@@ -353,12 +353,12 @@ func (tiu *TblInventoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tiu.mutation.DeletedAtCleared() {
 		_spec.ClearField(tblinventory.FieldDeletedAt, field.TypeTime)
 	}
-	if tiu.mutation.InventoryCleared() {
+	if tiu.mutation.InventoryTagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tblinventory.InventoryTable,
-			Columns: []string{tblinventory.InventoryColumn},
+			Table:   tblinventory.InventoryTagTable,
+			Columns: []string{tblinventory.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),
@@ -366,12 +366,12 @@ func (tiu *TblInventoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tiu.mutation.RemovedInventoryIDs(); len(nodes) > 0 && !tiu.mutation.InventoryCleared() {
+	if nodes := tiu.mutation.RemovedInventoryTagIDs(); len(nodes) > 0 && !tiu.mutation.InventoryTagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tblinventory.InventoryTable,
-			Columns: []string{tblinventory.InventoryColumn},
+			Table:   tblinventory.InventoryTagTable,
+			Columns: []string{tblinventory.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),
@@ -382,12 +382,12 @@ func (tiu *TblInventoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tiu.mutation.InventoryIDs(); len(nodes) > 0 {
+	if nodes := tiu.mutation.InventoryTagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tblinventory.InventoryTable,
-			Columns: []string{tblinventory.InventoryColumn},
+			Table:   tblinventory.InventoryTagTable,
+			Columns: []string{tblinventory.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),
@@ -633,19 +633,19 @@ func (tiuo *TblInventoryUpdateOne) ClearDeletedAt() *TblInventoryUpdateOne {
 	return tiuo
 }
 
-// AddInventoryIDs adds the "inventory" edge to the TblInventoryTag entity by IDs.
-func (tiuo *TblInventoryUpdateOne) AddInventoryIDs(ids ...string) *TblInventoryUpdateOne {
-	tiuo.mutation.AddInventoryIDs(ids...)
+// AddInventoryTagIDs adds the "inventoryTag" edge to the TblInventoryTag entity by IDs.
+func (tiuo *TblInventoryUpdateOne) AddInventoryTagIDs(ids ...string) *TblInventoryUpdateOne {
+	tiuo.mutation.AddInventoryTagIDs(ids...)
 	return tiuo
 }
 
-// AddInventory adds the "inventory" edges to the TblInventoryTag entity.
-func (tiuo *TblInventoryUpdateOne) AddInventory(t ...*TblInventoryTag) *TblInventoryUpdateOne {
+// AddInventoryTag adds the "inventoryTag" edges to the TblInventoryTag entity.
+func (tiuo *TblInventoryUpdateOne) AddInventoryTag(t ...*TblInventoryTag) *TblInventoryUpdateOne {
 	ids := make([]string, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
-	return tiuo.AddInventoryIDs(ids...)
+	return tiuo.AddInventoryTagIDs(ids...)
 }
 
 // AddInventoryCartIDs adds the "InventoryCart" edge to the TblCart entity by IDs.
@@ -683,25 +683,25 @@ func (tiuo *TblInventoryUpdateOne) Mutation() *TblInventoryMutation {
 	return tiuo.mutation
 }
 
-// ClearInventory clears all "inventory" edges to the TblInventoryTag entity.
-func (tiuo *TblInventoryUpdateOne) ClearInventory() *TblInventoryUpdateOne {
-	tiuo.mutation.ClearInventory()
+// ClearInventoryTag clears all "inventoryTag" edges to the TblInventoryTag entity.
+func (tiuo *TblInventoryUpdateOne) ClearInventoryTag() *TblInventoryUpdateOne {
+	tiuo.mutation.ClearInventoryTag()
 	return tiuo
 }
 
-// RemoveInventoryIDs removes the "inventory" edge to TblInventoryTag entities by IDs.
-func (tiuo *TblInventoryUpdateOne) RemoveInventoryIDs(ids ...string) *TblInventoryUpdateOne {
-	tiuo.mutation.RemoveInventoryIDs(ids...)
+// RemoveInventoryTagIDs removes the "inventoryTag" edge to TblInventoryTag entities by IDs.
+func (tiuo *TblInventoryUpdateOne) RemoveInventoryTagIDs(ids ...string) *TblInventoryUpdateOne {
+	tiuo.mutation.RemoveInventoryTagIDs(ids...)
 	return tiuo
 }
 
-// RemoveInventory removes "inventory" edges to TblInventoryTag entities.
-func (tiuo *TblInventoryUpdateOne) RemoveInventory(t ...*TblInventoryTag) *TblInventoryUpdateOne {
+// RemoveInventoryTag removes "inventoryTag" edges to TblInventoryTag entities.
+func (tiuo *TblInventoryUpdateOne) RemoveInventoryTag(t ...*TblInventoryTag) *TblInventoryUpdateOne {
 	ids := make([]string, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
-	return tiuo.RemoveInventoryIDs(ids...)
+	return tiuo.RemoveInventoryTagIDs(ids...)
 }
 
 // ClearInventoryCart clears all "InventoryCart" edges to the TblCart entity.
@@ -860,12 +860,12 @@ func (tiuo *TblInventoryUpdateOne) sqlSave(ctx context.Context) (_node *TblInven
 	if tiuo.mutation.DeletedAtCleared() {
 		_spec.ClearField(tblinventory.FieldDeletedAt, field.TypeTime)
 	}
-	if tiuo.mutation.InventoryCleared() {
+	if tiuo.mutation.InventoryTagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tblinventory.InventoryTable,
-			Columns: []string{tblinventory.InventoryColumn},
+			Table:   tblinventory.InventoryTagTable,
+			Columns: []string{tblinventory.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),
@@ -873,12 +873,12 @@ func (tiuo *TblInventoryUpdateOne) sqlSave(ctx context.Context) (_node *TblInven
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tiuo.mutation.RemovedInventoryIDs(); len(nodes) > 0 && !tiuo.mutation.InventoryCleared() {
+	if nodes := tiuo.mutation.RemovedInventoryTagIDs(); len(nodes) > 0 && !tiuo.mutation.InventoryTagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tblinventory.InventoryTable,
-			Columns: []string{tblinventory.InventoryColumn},
+			Table:   tblinventory.InventoryTagTable,
+			Columns: []string{tblinventory.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),
@@ -889,12 +889,12 @@ func (tiuo *TblInventoryUpdateOne) sqlSave(ctx context.Context) (_node *TblInven
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tiuo.mutation.InventoryIDs(); len(nodes) > 0 {
+	if nodes := tiuo.mutation.InventoryTagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   tblinventory.InventoryTable,
-			Columns: []string{tblinventory.InventoryColumn},
+			Table:   tblinventory.InventoryTagTable,
+			Columns: []string{tblinventory.InventoryTagColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tblinventorytag.FieldID, field.TypeString),

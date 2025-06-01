@@ -30,21 +30,21 @@ const (
 	FieldUpdatedAt = "Updated_at"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "Deleted_at"
-	// EdgeInventory holds the string denoting the inventory edge name in mutations.
-	EdgeInventory = "inventory"
+	// EdgeInventoryTag holds the string denoting the inventorytag edge name in mutations.
+	EdgeInventoryTag = "inventoryTag"
 	// EdgeInventoryCart holds the string denoting the inventorycart edge name in mutations.
 	EdgeInventoryCart = "InventoryCart"
 	// EdgeInventoryPayment holds the string denoting the inventorypayment edge name in mutations.
 	EdgeInventoryPayment = "InventoryPayment"
 	// Table holds the table name of the tblinventory in the database.
 	Table = "Tbl_Inventory"
-	// InventoryTable is the table that holds the inventory relation/edge.
-	InventoryTable = "Tbl_Inventory_Tag"
-	// InventoryInverseTable is the table name for the TblInventoryTag entity.
+	// InventoryTagTable is the table that holds the inventoryTag relation/edge.
+	InventoryTagTable = "Tbl_Inventory_Tag"
+	// InventoryTagInverseTable is the table name for the TblInventoryTag entity.
 	// It exists in this package in order to avoid circular dependency with the "tblinventorytag" package.
-	InventoryInverseTable = "Tbl_Inventory_Tag"
-	// InventoryColumn is the table column denoting the inventory relation/edge.
-	InventoryColumn = "tbl_inventory_inventory"
+	InventoryTagInverseTable = "Tbl_Inventory_Tag"
+	// InventoryTagColumn is the table column denoting the inventoryTag relation/edge.
+	InventoryTagColumn = "InventoryId"
 	// InventoryCartTable is the table that holds the InventoryCart relation/edge.
 	InventoryCartTable = "Tbl_Cart"
 	// InventoryCartInverseTable is the table name for the TblCart entity.
@@ -143,17 +143,17 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedAt, opts...).ToFunc()
 }
 
-// ByInventoryCount orders the results by inventory count.
-func ByInventoryCount(opts ...sql.OrderTermOption) OrderOption {
+// ByInventoryTagCount orders the results by inventoryTag count.
+func ByInventoryTagCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newInventoryStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newInventoryTagStep(), opts...)
 	}
 }
 
-// ByInventory orders the results by inventory terms.
-func ByInventory(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByInventoryTag orders the results by inventoryTag terms.
+func ByInventoryTag(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInventoryStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newInventoryTagStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -184,11 +184,11 @@ func ByInventoryPayment(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 		sqlgraph.OrderByNeighborTerms(s, newInventoryPaymentStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newInventoryStep() *sqlgraph.Step {
+func newInventoryTagStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InventoryInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, InventoryTable, InventoryColumn),
+		sqlgraph.To(InventoryTagInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, InventoryTagTable, InventoryTagColumn),
 	)
 }
 func newInventoryCartStep() *sqlgraph.Step {

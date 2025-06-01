@@ -226,7 +226,7 @@ func init() {
 	// tbluserDescIsActive is the schema descriptor for is_active field.
 	tbluserDescIsActive := tbluserFields[6].Descriptor()
 	// tbluser.DefaultIsActive holds the default value on creation for the is_active field.
-	tbluser.DefaultIsActive = tbluserDescIsActive.Default.(int)
+	tbluser.DefaultIsActive = tbluserDescIsActive.Default.(bool)
 	// tbluserDescIPAddress is the schema descriptor for ip_address field.
 	tbluserDescIPAddress := tbluserFields[9].Descriptor()
 	// tbluser.IPAddressValidator is a validator for the "ip_address" field. It is called by the builders before save.

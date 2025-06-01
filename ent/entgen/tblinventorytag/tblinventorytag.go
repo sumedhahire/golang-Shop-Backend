@@ -24,26 +24,26 @@ const (
 	FieldUpdatedAt = "Updated_at"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
 	FieldDeletedAt = "Deleted_at"
-	// EdgeTagID holds the string denoting the tag_id edge name in mutations.
-	EdgeTagID = "tag_Id"
-	// EdgeInventoryID holds the string denoting the inventory_id edge name in mutations.
-	EdgeInventoryID = "inventory_Id"
+	// EdgeInventory holds the string denoting the inventory edge name in mutations.
+	EdgeInventory = "inventory"
+	// EdgeTag holds the string denoting the tag edge name in mutations.
+	EdgeTag = "tag"
 	// Table holds the table name of the tblinventorytag in the database.
 	Table = "Tbl_Inventory_Tag"
-	// TagIDTable is the table that holds the tag_Id relation/edge.
-	TagIDTable = "Tbl_Inventory_Tag"
-	// TagIDInverseTable is the table name for the TblTag entity.
-	// It exists in this package in order to avoid circular dependency with the "tbltag" package.
-	TagIDInverseTable = "Tbl_Tag"
-	// TagIDColumn is the table column denoting the tag_Id relation/edge.
-	TagIDColumn = "tbl_tag_tag"
-	// InventoryIDTable is the table that holds the inventory_Id relation/edge.
-	InventoryIDTable = "Tbl_Inventory_Tag"
-	// InventoryIDInverseTable is the table name for the TblInventory entity.
+	// InventoryTable is the table that holds the inventory relation/edge.
+	InventoryTable = "Tbl_Inventory_Tag"
+	// InventoryInverseTable is the table name for the TblInventory entity.
 	// It exists in this package in order to avoid circular dependency with the "tblinventory" package.
-	InventoryIDInverseTable = "Tbl_Inventory"
-	// InventoryIDColumn is the table column denoting the inventory_Id relation/edge.
-	InventoryIDColumn = "tbl_inventory_inventory"
+	InventoryInverseTable = "Tbl_Inventory"
+	// InventoryColumn is the table column denoting the inventory relation/edge.
+	InventoryColumn = "InventoryId"
+	// TagTable is the table that holds the tag relation/edge.
+	TagTable = "Tbl_Inventory_Tag"
+	// TagInverseTable is the table name for the TblTag entity.
+	// It exists in this package in order to avoid circular dependency with the "tbltag" package.
+	TagInverseTable = "Tbl_Tag"
+	// TagColumn is the table column denoting the tag relation/edge.
+	TagColumn = "TagId"
 )
 
 // Columns holds all SQL columns for tblinventorytag fields.
@@ -56,22 +56,10 @@ var Columns = []string{
 	FieldDeletedAt,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "Tbl_Inventory_Tag"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"tbl_inventory_inventory",
-	"tbl_tag_tag",
-}
-
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -116,30 +104,30 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedAt, opts...).ToFunc()
 }
 
-// ByTagIDField orders the results by tag_Id field.
-func ByTagIDField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByInventoryField orders the results by inventory field.
+func ByInventoryField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTagIDStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newInventoryStep(), sql.OrderByField(field, opts...))
 	}
 }
 
-// ByInventoryIDField orders the results by inventory_Id field.
-func ByInventoryIDField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByTagField orders the results by tag field.
+func ByTagField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newInventoryIDStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newTagStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newTagIDStep() *sqlgraph.Step {
+func newInventoryStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TagIDInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, TagIDTable, TagIDColumn),
+		sqlgraph.To(InventoryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, InventoryTable, InventoryColumn),
 	)
 }
-func newInventoryIDStep() *sqlgraph.Step {
+func newTagStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(InventoryIDInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, InventoryIDTable, InventoryIDColumn),
+		sqlgraph.To(TagInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, TagTable, TagColumn),
 	)
 }

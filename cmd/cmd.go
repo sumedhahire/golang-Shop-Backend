@@ -5,8 +5,11 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
+	echoSwagger "github.com/swaggo/echo-swagger"
+	_ "inventory/docs"
 	"inventory/server"
 	"inventory/server/errorhandler"
+	"os"
 )
 
 func Start() {
@@ -20,7 +23,9 @@ func Start() {
 	e.Use(middleware.CORS())
 	e.HTTPErrorHandler = errorhandler.HttpEchoCustomError
 
+	e.GET("/swagger/*any", echoSwagger.WrapHandler)
+
 	server.InitService(e)
 
-	log.Fatal(e.Start(":8080"))
+	log.Fatal(e.Start(":" + os.Getenv("APP_PORT")))
 }
