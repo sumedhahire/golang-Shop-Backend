@@ -23,7 +23,7 @@ func InitUser(v1 *echo.Group, client *config.AppConfig) {
 	userRouteAdmin := userRoute.Group("/admin")
 	userRouteAdmin.Use(customMiddleware.OauthValidationAdmin())
 	userRouteAdmin.GET("", handler.List)
-
+	userRouteAdmin.POST("", handler.Add)
 	//userRouteSecure.POST("", handler.Add)
 	//userRouteSecure.POST("/buy", handler.Buy)
 	//userRouteSecure.POST("/verify", handler.Verify)

@@ -12,6 +12,7 @@ type IHandler interface {
 	Get(e echo.Context) error
 	List(e echo.Context) error
 	ChangeActive(e echo.Context) error
+	Add(e echo.Context) error
 }
 
 type SHandler struct {
@@ -44,6 +45,20 @@ func (h SHandler) Get(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, util.ConvertToResponse(rs))
+}
+
+func (h SHandler) Add(c echo.Context) error {
+	var rq RQUser
+	if err := util.BindAndValidate(&rq, c); err != nil {
+		return err
+	}
+
+	err := h.Service.Add(c.Request().Context(), &rq)
+	if err != nil {
+		return err
+	}
+
+	return c.NoContent(http.StatusCreated)
 }
 
 // List godoc

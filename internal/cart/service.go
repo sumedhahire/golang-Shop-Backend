@@ -28,9 +28,9 @@ type SCartService struct {
 
 func NewCartService(client *config.AppConfig) ICartService {
 	return &SCartService{
-		b2Bucket: client.B2Bucket,
-		razor:    client.Razor,
-		storage:  NewCartStorage(client.Client),
+		//b2Bucket: client.B2Bucket,
+		razor:   client.Razor,
+		storage: NewCartStorage(client.Client),
 	}
 }
 

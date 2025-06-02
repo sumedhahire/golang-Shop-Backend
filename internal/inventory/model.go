@@ -65,9 +65,9 @@ func (rs *RSInventory) MapTo(inventory *Inventory) {
 	rs.Id = inventory.Id
 	rs.Name = inventory.Name
 	rs.Description = inventory.Description
+	rs.ImageUrl = inventory.ImageUrl
 	rs.Tags = inventory.Tags
 	rs.Price = inventory.Price
-
 }
 
 func (rq *RQInventory) MapFrom() Inventory {

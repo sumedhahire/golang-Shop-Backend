@@ -3,10 +3,10 @@ package inventory
 import (
 	"context"
 	"fmt"
-	"github.com/kurin/blazer/b2"
+	"github.com/minio/minio-go/v7"
 	"inventory/config"
-	"io"
 	"mime/multipart"
+	"os"
 	"strings"
 	"time"
 )
@@ -19,14 +19,16 @@ type IService interface {
 }
 
 type SService struct {
-	b2Bucket *b2.Bucket
-	storage  IStorage
+	minio *minio.Client
+	//b2Bucket *b2.Bucket
+	storage IStorage
 }
 
 func NewService(client *config.AppConfig) IService {
 	return SService{
-		b2Bucket: client.B2Bucket,
-		storage:  NewStorage(client.Client),
+		minio: client.MinioClient,
+		//b2Bucket: client.B2Bucket,
+		storage: NewStorage(client.Client),
 	}
 }
 
@@ -37,25 +39,31 @@ func (s SService) Get(ctx context.Context, id string) (RSInventory, error) {
 	}
 	var rs RSInventory
 	rs.MapTo(inventory)
-	rs.ImageUrl, err = s.GetAuthorizedDownloadURL(ctx, inventory.ImageUrl, time.Minute*30)
+	//rs.ImageUrl, err = s.GetAuthorizedDownloadURL(ctx, inventory.ImageUrl, time.Minute*30)
+	//if err != nil {
+	//	return RSInventory{}, err
+	//}
+	rs.ImageUrl, err = s.getMinioLink(rs.ImageUrl)
 	if err != nil {
 		return RSInventory{}, err
 	}
 	return rs, nil
 }
 
-func (s SService) GetAuthorizedDownloadURL(ctx context.Context, filename string, duration time.Duration) (string, error) {
-	// Generate download auth token valid for duration
-	authToken, err := s.b2Bucket.AuthToken(ctx, filename, duration)
-	if err != nil {
-		return "", err
-	}
-
-	// Construct full URL with token
-	url := fmt.Sprintf("https://f005.backblazeb2.com/file/%s/%s?Authorization=%s",
-		s.b2Bucket.Name(), filename, authToken)
-	return url, nil
-}
+//--------------------------------------------------------
+//func (s SService) GetAuthorizedDownloadURL(ctx context.Context, filename string, duration time.Duration) (string, error) {
+//	// Generate download auth token valid for duration
+//	authToken, err := s.b2Bucket.AuthToken(ctx, filename, duration)
+//	if err != nil {
+//		return "", err
+//	}
+//
+//	// Construct full URL with token
+//	url := fmt.Sprintf("https://f005.backblazeb2.com/file/%s/%s?Authorization=%s",
+//		s.b2Bucket.Name(), filename, authToken)
+//	return url, nil
+//}
+//-----------------------------------------------------
 
 func (s SService) List(ctx context.Context, filter Filter) ([]RSInventory, error) {
 	inventories, err := s.storage.List(ctx, filter)
@@ -67,7 +75,11 @@ func (s SService) List(ctx context.Context, filter Filter) ([]RSInventory, error
 	for i, inv := range inventories {
 		var rs RSInventory
 		rs.MapTo(&inv)
-		rs.ImageUrl, err = s.GetAuthorizedDownloadURL(ctx, inv.ImageUrl, time.Minute*30)
+		//rs.ImageUrl, err = s.GetAuthorizedDownloadURL(ctx, inv.ImageUrl, time.Minute*30)
+		//if err != nil {
+		//	return nil, err
+		//	}
+		rs.ImageUrl, err = s.getMinioLink(rs.ImageUrl)
 		if err != nil {
 			return nil, err
 		}
@@ -95,7 +107,7 @@ func (s SService) Add(ctx context.Context, rq RQInventory, fileHeader *multipart
 	}
 	filename := fmt.Sprintf("%d.%s", time.Now().UnixNano(), ext)
 
-	url, err := s.uploadToB2(file, filename)
+	url, err := s.uploadToMinio(file, fileHeader, filename)
 	if err != nil {
 		return RSInventory{}, err
 	}
@@ -134,17 +146,48 @@ func (s SService) Update(ctx context.Context, rq RQInventory, updateId string) (
 	return rs, nil
 }
 
-func (s SService) uploadToB2(file io.Reader, filename string) (string, error) {
-	ctx := context.Background()
+//func (s SService) uploadToB2(file io.Reader, filename string) (string, error) {
+//	ctx := context.Background()
+//
+//	obj := s.b2Bucket.Object(filename)
+//	fmt.Println(obj)
+//	writer := obj.NewWriter(ctx)
+//	defer writer.Close()
+//
+//	if _, err := io.Copy(writer, file); err != nil {
+//		return "", err
+//	}
+//
+//	return filename, nil
+//}
 
-	obj := s.b2Bucket.Object(filename)
-	fmt.Println(obj)
-	writer := obj.NewWriter(ctx)
-	defer writer.Close()
+func (s SService) uploadToMinio(file multipart.File, fileHeader *multipart.FileHeader, filename string) (string, error) {
+	bucketName := os.Getenv("MINIO_BUCKET")
+	_, err := s.minio.PutObject(
+		context.Background(),
+		bucketName,      // bucket name
+		filename,        // object name in bucket
+		file,            // file reader (stream)
+		fileHeader.Size, // file size
+		minio.PutObjectOptions{ // content-type
+			ContentType: fileHeader.Header.Get("Content-Type"),
+		},
+	)
+	if err != nil {
+		return "", err
+	}
+	return filename, nil
+}
 
-	if _, err := io.Copy(writer, file); err != nil {
+func (s SService) getMinioLink(filename string) (string, error) {
+	bucketName := os.Getenv("MINIO_BUCKET")
+	expiry := time.Minute * 10
+
+	presignedURL, err := s.minio.PresignedGetObject(context.Background(), bucketName, filename, expiry, nil)
+	if err != nil {
 		return "", err
 	}
 
-	return filename, nil
+	return presignedURL.String(), nil
+
 }

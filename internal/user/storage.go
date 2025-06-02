@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"inventory/ent/entgen"
 	"inventory/internal/util"
@@ -10,6 +11,7 @@ import (
 type IUserStorage interface {
 	Get(ctx context.Context, id string) (*User, error)
 	List(ctx context.Context) ([]User, error)
+	Add(ctx context.Context, user *User) error
 }
 
 type sStorage struct {
@@ -47,7 +49,6 @@ func (s sStorage) List(ctx context.Context) ([]User, error) {
 
 func (s sStorage) ChangeActive(ctx context.Context, id string) error {
 	err := util.ExecTx(ctx, s.client, func(tx *entgen.Tx) error {
-
 		err := activeUser(tx, id).Exec(ctx)
 		if err != nil {
 			return util.WrapperForDatabaseError("add", err)
@@ -60,5 +61,27 @@ func (s sStorage) ChangeActive(ctx context.Context, id string) error {
 		return err
 	}
 
+	return nil
+}
+
+func (s sStorage) Add(ctx context.Context, user *User) error {
+	err := util.ExecTx(ctx, s.client, func(tx *entgen.Tx) error {
+		count, err := checkByMail(tx, user.Email).Count(ctx)
+		if err != nil {
+			return err
+		}
+		if count != 0 {
+			return errors.New("user already exists")
+		}
+
+		err = add(tx, *user).Exec(ctx)
+		if err != nil {
+			return util.WrapperForDatabaseError("add", err)
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
 	return nil
 }

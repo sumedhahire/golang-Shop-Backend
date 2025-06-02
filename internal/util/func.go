@@ -10,6 +10,11 @@ import (
 	"inventory/internal/common/response"
 )
 
+//var (
+//	mini_host   = os.Getenv("MINIO_ENDPOINT")
+//	mini_bucket = os.Getenv("MINIO_BUCKET")
+//)
+
 func BindAndValidate(rq interface{}, e echo.Context) error {
 	err := e.Bind(rq)
 	if err != nil {
