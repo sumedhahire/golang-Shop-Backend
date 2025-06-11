@@ -200,9 +200,12 @@ func (h *SCartHandler) GetInvoice(e echo.Context) error {
 	return e.JSON(http.StatusOK, util.ConvertToResponse(inventoryId))
 }
 
-func GetBrought(e echo.Context) error {
+func (h *SCartHandler) GetBrought(e echo.Context) error {
 	userId := e.Get("userId").(string)
 
 	ctx := context.Background()
 
+	_ = userId
+	_ = ctx
+	return nil
 }

@@ -131,13 +131,16 @@ func (t *SCartStorage) getInvoice(ctx context.Context, userId, inventoryId strin
 }
 
 func (t *SCartStorage) listCompletedPayment(ctx context.Context, userId string) ([]Cart, error) {
-	entPayment, err := listCompletedPayment(t.client, userId).All(ctx)
-	if err != nil {
-		return nil, util.WrapperForDatabaseError("list payment", err)
-	}
+	//TODO:complete this
 
-	carts := make([]Cart, len(entPayment))
-	for index, payment := range entPayment {
-		carts[index].MapFrom(payment.Edges.Inventory)
-	}
+	//entPayment, err := listCompletedPayment(t.client, userId).All(ctx)
+	//if err != nil {
+	//	return nil, util.WrapperForDatabaseError("list payment", err)
+	//}
+
+	//carts := make([]Cart, len(entPayment))
+	//for index, payment := range entPayment {
+	//	carts[index].MapFrom(payment.Edges.Inventory)
+	//}
+	return nil, nil
 }
