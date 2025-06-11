@@ -2,6 +2,7 @@ package minio
 
 import (
 	"context"
+	"fmt"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"log"
@@ -33,7 +34,18 @@ func getMini() {
 	bucketName := os.Getenv("MINIO_BUCKET")
 	ctx := context.Background()
 
-	err = MiniClient.SetBucketPolicy(ctx, bucketName, "")
+	publicPolicy := fmt.Sprintf(`{
+			"Version": "2012-10-17",
+			"Statement": [
+				{
+					"Action": ["s3:GetObject"],
+					"Effect": "Allow",
+					"Principal": {"AWS": ["*"]},
+					"Resource": ["arn:aws:s3:::%s/*"]
+				}
+			]
+		}`, bucketName)
+	err = MiniClient.SetBucketPolicy(ctx, bucketName, publicPolicy)
 	if err != nil {
 		panic(err)
 	}
