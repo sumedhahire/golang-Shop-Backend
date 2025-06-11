@@ -14,7 +14,6 @@ import (
 type IHandler interface {
 	Get(e echo.Context) error
 	List(e echo.Context) error
-	ListAll(e echo.Context) error
 	Add(e echo.Context) error
 	Update(e echo.Context) error
 }
@@ -143,7 +142,7 @@ func (h SHandler) Add(c echo.Context) error {
 // @Accept       json
 // @Produce      json
 // @Param        id   path   string       true  "Inventory ID"
-// @Param body body inventory.RQInventory true "Updated inventory data"
+// @Param body inventory.RQInventory true "Updated inventory data"
 // @Success      200  {object}  response.BaseRS{data=inventory.RSInventory,error=interface{}}
 // @Failure      400  {object}  response.BaseRS{data=interface{},error=errorhandler.BaseErr}
 // @Failure      404  {object}  response.BaseRS{data=interface{},error=errorhandler.BaseErr}

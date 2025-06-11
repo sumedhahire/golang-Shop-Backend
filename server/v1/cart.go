@@ -22,4 +22,5 @@ func InitCart(v1 *echo.Group, client *config.AppConfig) {
 	cartRouteSecure.POST("/buy", handler.Buy)
 	cartRouteSecure.POST("/verify", handler.Verify)
 	cartRouteSecure.GET("/count", handler.BuyCount)
+	cartRouteSecure.GET("/invoice/:productId", handler.GetInvoice)
 }

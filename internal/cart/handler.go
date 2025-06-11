@@ -15,6 +15,8 @@ type ICartHandler interface {
 	Buy(e echo.Context) error
 	Verify(e echo.Context) error
 	BuyCount(e echo.Context) error
+	GetInvoice(e echo.Context) error
+	GetBrought(e echo.Context) error
 }
 type SCartHandler struct {
 	appConfig *config.AppConfig
@@ -182,4 +184,25 @@ func (h *SCartHandler) BuyCount(e echo.Context) error {
 	}
 
 	return e.JSON(http.StatusOK, util.ConvertToResponse(rs))
+}
+
+// /api/v1/cart/invoice/{paymentId}
+func (h *SCartHandler) GetInvoice(e echo.Context) error {
+	userId := e.Get("userId").(string)
+	inventoryId := e.Param("productId")
+
+	ctx := context.Background()
+
+	err := h.service.GetInvoice(ctx, userId, inventoryId)
+	if err != nil {
+		return err
+	}
+	return e.JSON(http.StatusOK, util.ConvertToResponse(inventoryId))
+}
+
+func GetBrought(e echo.Context) error {
+	userId := e.Get("userId").(string)
+
+	ctx := context.Background()
+
 }

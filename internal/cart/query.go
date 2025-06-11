@@ -42,6 +42,13 @@ func Get(client *entgen.Client, id string) *entgen.TblCartQuery {
 
 }
 
+func getOrderId(client *entgen.Client, userId, inventoryId string) *entgen.TblPaymentQuery {
+	return client.TblPayment.Query().
+		Where(tblpayment.UserId(userId)).
+		Where(tblpayment.InventoryId(inventoryId)).
+		Where(tblpayment.StatusEQ("paid"))
+}
+
 func List(client *entgen.Client, userId string, status string) *entgen.TblCartQuery {
 	query := client.TblCart.
 		Query().
@@ -100,4 +107,10 @@ func BuyCount(client *entgen.Client, id string) *entgen.TblCartQuery {
 	return client.TblCart.Query().
 		Where(tblcart.UserId(id)).
 		Where(tblcart.StatusEQ(tblcart.StatusBrought))
+}
+
+func listCompletedPayment(client *entgen.Client, userId string) *entgen.TblPaymentQuery {
+	return client.TblPayment.Query().
+		Where(tblpayment.UserId(userId)).
+		WithInventory()
 }

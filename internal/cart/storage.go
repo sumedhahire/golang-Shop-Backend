@@ -17,6 +17,8 @@ type ICartStorage interface {
 	changeStatus(ctx context.Context, id string) error
 	getPayment(ctx context.Context, id string) (Payment, error)
 	getBuyCount(ctx context.Context, userId string) (int, error)
+	getInvoice(ctx context.Context, userId, inventoryId string) (Payment, error)
+	listCompletedPayment(ctx context.Context, userId string) ([]Cart, error)
 }
 
 type SCartStorage struct {
@@ -115,4 +117,27 @@ func (t *SCartStorage) changeStatus(ctx context.Context, id string) error {
 
 func (t *SCartStorage) getBuyCount(ctx context.Context, userId string) (int, error) {
 	return BuyCount(t.client, userId).Count(ctx)
+}
+
+func (t *SCartStorage) getInvoice(ctx context.Context, userId, inventoryId string) (Payment, error) {
+	entPayment, err := getOrderId(t.client, userId, inventoryId).First(ctx)
+	if err != nil {
+		return Payment{}, util.WrapperForDatabaseError("orderId", err)
+	}
+
+	var payment Payment
+	payment.MapFrom(entPayment)
+	return payment, nil
+}
+
+func (t *SCartStorage) listCompletedPayment(ctx context.Context, userId string) ([]Cart, error) {
+	entPayment, err := listCompletedPayment(t.client, userId).All(ctx)
+	if err != nil {
+		return nil, util.WrapperForDatabaseError("list payment", err)
+	}
+
+	carts := make([]Cart, len(entPayment))
+	for index, payment := range entPayment {
+		carts[index].MapFrom(payment.Edges.Inventory)
+	}
 }

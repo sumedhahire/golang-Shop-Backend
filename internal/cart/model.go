@@ -23,6 +23,7 @@ type Cart struct {
 	ProductId inventory.Inventory
 	UserID    string
 	Status    string
+	OrderId   *string
 	ImageUrl  string
 }
 
