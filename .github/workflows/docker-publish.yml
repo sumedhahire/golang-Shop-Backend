@@ -13,26 +13,32 @@ jobs:
       packages: write
 
     steps:
-      # 1) Check out your code
-      - uses: actions/checkout@v3
+      # 1) Checkout
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # 2) Create a lowercase repo slug and export it to $REPO_LC
+      # 2) Lowercase GITHUB_REPOSITORY → REPO_LC (fixing the quoting!)
       - name: Lowercase repo name
         run: |
-          echo "REPO_LC=$(echo '${GITHUB_REPOSITORY}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          REPO_LC=$(echo "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')
+          echo "REPO_LC=${REPO_LC}" >> $GITHUB_ENV
 
-      # 3) Log in to GHCR
-      - uses: docker/login-action@v2
+      # 2.1) DEBUG: print it out
+      - name: Debug: show REPO_LC
+        run: echo "Repo slug is: $REPO_LC"
+
+      # 3) Login
+      - name: Log in to GHCR
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 4) Build & push, referencing the env var via ${{ env.REPO_LC }}
+      # 4) Build & push (now using the correctly populated env.REPO_LC)
       - name: Build & Push Docker Image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: |
-            ghcr.io/mitti-more-go-backend:latest
+          tags: ghcr.io/${{ env.REPO_LC }}:latest
