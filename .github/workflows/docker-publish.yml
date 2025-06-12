@@ -24,8 +24,8 @@ jobs:
           echo "REPO_LC=${REPO_LC}" >> $GITHUB_ENV
 
       # 2.1) DEBUG: print it out
-      - name: Debug: show REPO_LC
-        run: echo "Repo slug is: $REPO_LC"
+      - name: Debug:show REPO_LC
+        run: echo "Repo slug is:$REPO_LC"
 
       # 3) Login
       - name: Log in to GHCR
