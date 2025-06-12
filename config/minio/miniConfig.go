@@ -33,6 +33,22 @@ func getMini() {
 
 	bucketName := os.Getenv("MINIO_BUCKET")
 	ctx := context.Background()
+	location := "us-east-1"
+
+	exists, err := client.BucketExists(ctx, bucketName)
+	if err != nil {
+		log.Fatalf("Failed to check bucket: %v", err)
+	}
+
+	if !exists {
+		err := client.MakeBucket(ctx, bucketName, minio.MakeBucketOptions{Region: location})
+		if err != nil {
+			log.Fatalf("Failed to create bucket: %v", err)
+		}
+		log.Printf("✅ Created bucket: %s\n", bucketName)
+	} else {
+		log.Printf("✅ Bucket already exists: %s\n", bucketName)
+	}
 
 	publicPolicy := fmt.Sprintf(`{
 			"Version": "2012-10-17",

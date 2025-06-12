@@ -13,6 +13,7 @@ RUN go mod download
 # Copy source code
 COPY . .
 
+
 # Build the application
 RUN go build -o main .
 # Stage 2 — Run the app with a minimal image
@@ -22,7 +23,7 @@ WORKDIR /app
 
 # Copy binary from builder stage
 COPY --from=builder /app/main .
-
+COPY --from=builder /app/migrations ./migrations
 
 EXPOSE 8080
 

@@ -43,10 +43,9 @@ func (s SService) Get(ctx context.Context, id string) (RSInventory, error) {
 	//if err != nil {
 	//	return RSInventory{}, err
 	//}
-	rs.ImageUrl, err = s.getMinioLink(rs.ImageUrl)
-	if err != nil {
-		return RSInventory{}, err
-	}
+	//rs.ImageUrl, err = s.getMinioLink(rs.ImageUrl)
+	rs.ImageUrl = fmt.Sprintf("%s/%s", os.Getenv("MINIO_PUBLIC_ENDPOINT"), rs.ImageUrl)
+
 	return rs, nil
 }
 
@@ -79,10 +78,11 @@ func (s SService) List(ctx context.Context, filter Filter) ([]RSInventory, error
 		//if err != nil {
 		//	return nil, err
 		//	}
-		rs.ImageUrl, err = s.getMinioLink(rs.ImageUrl)
-		if err != nil {
-			return nil, err
-		}
+		//rs.ImageUrl, err = s.getMinioLink(rs.ImageUrl)
+		rs.ImageUrl = fmt.Sprintf("%s/%s", os.Getenv("MINIO_PUBLIC_ENDPOINT"), rs.ImageUrl)
+		//if err != nil {
+		//	return nil, err
+		//}
 		rsArr[i] = rs
 	}
 
@@ -188,6 +188,7 @@ func (s SService) getMinioLink(filename string) (string, error) {
 		return "", err
 	}
 
-	return presignedURL.String(), nil
+	publicURL := strings.Replace(presignedURL.String(), "host.docker.internal", "localhost", 1)
+	return publicURL, nil
 
 }
