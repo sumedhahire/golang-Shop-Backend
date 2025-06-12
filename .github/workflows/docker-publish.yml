@@ -13,15 +13,16 @@ jobs:
       packages: write
 
     steps:
+      # 1️⃣ Checkout your code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 1️⃣ Lowercase GITHUB_REPOSITORY into REPO_LC
+      # 2️⃣ Lowercase GITHUB_REPOSITORY into env.REPO_LC
       - name: Create lowercase repo name
         run: |
           echo "REPO_LC=$(echo '${GITHUB_REPOSITORY}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
-      # 2️⃣ Log in to GHCR
+      # 3️⃣ Log in to GHCR
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -29,7 +30,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3️⃣ Build & push with docker/build-push-action
+      # 4️⃣ Build & push in one step
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
