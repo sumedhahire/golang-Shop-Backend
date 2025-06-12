@@ -35,4 +35,4 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ env.REPO_LC }}:latest
+            ghcr.io/mitti-more-go-backend:latest
