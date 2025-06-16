@@ -1,6 +1,18 @@
+
 # Mitti & More – Golang E-commerce Backend
 
-![Docker Logo](https://upload.wikimedia.org/wikipedia/commons/4/4e/Docker_%28container_engine%29_logo.svg)
+<table>
+  <tr>
+    <td>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Docker_%28container_engine%29_logo.svg" alt="Docker Logo" width="64" />
+    </td>
+    <td style="vertical-align: middle; padding-left: 10px;">
+      <a href="https://github.com/sumedhahire/golang-Shop-Backend/pkgs/container/golang-shop-backend" target="_blank" style="font-size: 18px; font-weight: bold; text-decoration: none; color: #0366d6;">
+        GoLang Shop Backend Docker Container
+      </a>
+    </td>
+  </tr>
+</table>
 
 A production-ready backend for an online store, built using Go. Features include custom OAuth2.0 authentication, Razorpay integration, email notifications, and modular API structure. Built with scalability and maintainability in mind.
 
@@ -8,7 +20,7 @@ A production-ready backend for an online store, built using Go. Features include
 
 ## 📦 Tech Stack
 
-- **Language:** Go 1.24+
+- **Language:** Go 1.21+
 - **Framework:** Echo
 - **Database:** MySql
 - **ORM:** Entgo
